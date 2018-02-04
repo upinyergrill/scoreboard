@@ -1,0 +1,67 @@
+import sys
+import json
+import requests
+import datetime
+
+now = datetime.datetime.now()
+date = now.strftime("%Y-%m-%d")
+
+allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
+
+#Hardcoded for now until a selection menu is created or some conf file is referenced where you can manually pick
+teamId = '5'
+
+allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
+teampick = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + teamId)
+games = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + teamId + '?expand=team.schedule.next&expand=team.schedule.previous')
+parsed_games = (games.json())
+parsed_teampick = (teampick.json())
+parsed_allteams = (allteams.json())
+
+#for each in parsed_allteams['teams']:
+#       print(str(each['id']) + " " + each['locationName'] + " " + each['teamName'])
+
+nextgamedate = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['date'])
+
+if date == nextgamedate:
+	gamePK = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
+else:
+	gamePK = (parsed_games['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['gamePk'])
+
+gameinfo = requests.get('https://statsapi.web.nhl.com/api/v1/game/' + str(gamePK) + '/feed/live')
+parsed_gameinfo = (gameinfo.json())
+
+#print(gamePK)
+
+gamestatus = (parsed_gameinfo['gameData']['status']['abstractGameState'])
+print(gamestatus)
+
+if gamestatus == "Live":
+	awayteam = (parsed_gameinfo['gameData']['teams']['away']['abbreviation'])
+	hometeam = (parsed_gameinfo['gameData']['teams']['home']['abbreviation'])
+	awayscore = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['goals'])
+	homescore = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['goals'])
+	period = (parsed_gameinfo['liveData']['linescore']['currentPeriodOrdinal'])
+	time = (parsed_gameinfo['liveData']['linescore']['currentPeriodTimeRemaining'])
+	awaysog = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['shots'])
+	homesog = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['shots'])
+	print(hometeam + " " + str(homescore) + " | " + str(awayscore) + " " + awayteam)
+	print("Period: " + period)
+	print("Time Remaining: " + time)
+	print("SoG: " + hometeam + " " + str(homesog) + " | " + str(awaysog) + " " + awayteam)
+else:
+	awayteam = (parsed_gameinfo['gameData']['teams']['away']['abbreviation'])
+	hometeam = (parsed_gameinfo['gameData']['teams']['home']['abbreviation'])
+	print(hometeam + " | " + awayteam)
+	print("Game starts at " + date)
+#print(parsed_teampick['teams'][0]['abbreviation'])
+
+#teamName = parsed_allteams['teams'][1]['name']
+#print("You picked the " + teamName)
+
+# POSSIBLE MENU CREATION HERE
+#for each in parsed_teampick['teams']:
+#	print(str(each['id']) + " " + each['locationName'] + " " + each['teamName'])
+
+#my_dict=(json.load(url.json()))
+#print(my_dict.keys())
