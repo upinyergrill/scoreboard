@@ -9,7 +9,7 @@ date = now.strftime("%Y-%m-%d")
 allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
 
 #Hardcoded for now until a selection menu is created or some conf file is referenced where you can manually pick
-teamId = '5'
+teamId = '14'
 
 allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
 teampick = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + teamId)
@@ -23,10 +23,10 @@ parsed_allteams = (allteams.json())
 
 nextgamedate = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['date'])
 
-#if date == nextgamedate:
-#	gamePK = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
-#else:
-gamePK = (parsed_games['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['gamePk'])
+if date == nextgamedate:
+	gamePK = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
+else:
+	gamePK = (parsed_games['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['gamePk'])
 
 gameinfo = requests.get('https://statsapi.web.nhl.com/api/v1/game/' + str(gamePK) + '/feed/live')
 parsed_gameinfo = (gameinfo.json())
@@ -42,16 +42,20 @@ hometeam = (parsed_gameinfo['gameData']['teams']['home']['abbreviation'])
 awayscore = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['goals'])
 homescore = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['goals'])
 period = (parsed_gameinfo['liveData']['linescore']['currentPeriodOrdinal'])
-time = (parsed_gameinfo['liveData']['linescore']['currentPeriodTimeRemaining'])
+timeleft = (parsed_gameinfo['liveData']['linescore']['currentPeriodTimeRemaining'])
 awaysog = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['shots'])
 homesog = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['shots'])
 homescore = "{0:0=2d}".format(homescore)
 awayscore = "{0:0=2d}".format(awayscore)
-if time == "Final":
-	time = "00:00" 
-print(" " + hometeam + " " + str(homescore) + "|" + str(awayscore) + " " + awayteam)
-print(" Box " + time + " Box")
-print(" ++   " + period + "    +")
+
+if timeleft == "Final":
+	timeleft = "00:00"
+
+if timeleft == "END":
+	timeleft = "00:00"
+#print(" " + hometeam + " " + str(homescore) + "|" + str(awayscore) + " " + awayteam)
+#print(" Box " + time + " Box")
+#print(" ++   " + period + "    +")
 #print("  " + str(homesog) + "|SoG|" + str(awaysog))
 #else:
 #	awayteam = (parsed_gameinfo['gameData']['teams']['away']['abbreviation'])

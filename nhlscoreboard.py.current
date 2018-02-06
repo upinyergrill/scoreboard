@@ -9,7 +9,7 @@ date = now.strftime("%Y-%m-%d")
 allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
 
 #Hardcoded for now until a selection menu is created or some conf file is referenced where you can manually pick
-teamId = '5'
+teamId = '24'
 
 allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
 teampick = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + teamId)
@@ -22,7 +22,6 @@ parsed_allteams = (allteams.json())
 #       print(str(each['id']) + " " + each['locationName'] + " " + each['teamName'])
 
 nextgamedate = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['date'])
-
 if date == nextgamedate:
 	gamePK = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
 else:
@@ -34,7 +33,6 @@ parsed_gameinfo = (gameinfo.json())
 #print(gamePK)
 
 gamestatus = (parsed_gameinfo['gameData']['status']['abstractGameState'])
-print(gamestatus)
 
 if gamestatus == "Live":
 	awayteam = (parsed_gameinfo['gameData']['teams']['away']['abbreviation'])

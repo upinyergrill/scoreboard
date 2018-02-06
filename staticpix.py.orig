@@ -1,0 +1,81 @@
+from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
+from nhlscoreboard import *
+import sys
+import time
+
+options = RGBMatrixOptions()
+options.rows = 32
+options.chain_length = 2
+options.brightness = 20
+
+matrix = RGBMatrix(options = options)
+font = graphics.Font()
+font.LoadFont('Assets/tom-thumb.bdf')
+color = graphics.Color(255, 255, 255)
+time_text = str(timeleft)
+period_text = period
+away_team_text = awayteam
+home_team_text = hometeam
+away_score = awayscore
+home_score = homescore
+away_sog = str(awaysog)
+home_sog = str(homesog)
+sog = "SoG"
+box = "Box"
+
+# Score positions
+graphics.DrawText(matrix, font, 36, 7, color, away_score)
+graphics.DrawText(matrix, font, 20, 7, color, home_score)
+
+# Shot on Goal positions
+graphics.DrawText(matrix, font, 41, 30, color, away_sog)
+graphics.DrawText(matrix, font, 15, 30, color, home_sog)
+
+# Team Abbrevaitions position
+graphics.DrawText(matrix, font, 48, 7, color, away_team_text)
+graphics.DrawText(matrix, font, 5, 7, color, home_team_text)
+
+# Time and Period positions
+graphics.DrawText(matrix, font, 22, 15, color, time_text)
+graphics.DrawText(matrix, font, 26, 21, color, period_text)
+graphics.DrawText(matrix, font, 26, 30, color, sog)
+
+# Penalty / Box Positions
+graphics.DrawText(matrix, font, 48, 15, color, box)
+graphics.DrawText(matrix, font, 5, 15, color, box)
+graphics.DrawText(matrix, font, 50, 20, color, "+")
+graphics.DrawText(matrix, font, 54, 20, color, "+")
+graphics.DrawText(matrix, font, 7, 20, color, "+")
+graphics.DrawText(matrix, font, 11, 20, color, "+")
+
+# Draw lines to contain time and period info
+for y in range(8, 23):
+    matrix.SetPixel(20, y, 255, 235, 59)
+for y in range(8, 23):
+    matrix.SetPixel(42, y, 255, 235, 59)
+
+for x in range(21, 42):
+    matrix.SetPixel(x, 8, 255, 235, 59)
+for x in range(21, 42):
+    matrix.SetPixel(x, 22, 255, 235, 59)
+
+for y in range(1, 8):
+    matrix.SetPixel(31, y, 255, 235, 59)
+
+# Scoreboard border
+for y in range(0, 32):
+    matrix.SetPixel(0, y, 255, 235, 59)
+for y in range(0, 32):
+    matrix.SetPixel(63, y, 255, 235, 59)
+
+for x in range(0, 64):
+    matrix.SetPixel(x, 0, 255, 235, 59)
+for x in range(0, 64):
+    matrix.SetPixel(x, 31, 255, 235, 59)
+
+try:
+    print("Press CTRL+C to stop.")
+    while True:
+        time.sleep(100)
+except KeyboardInterrupt:
+    sys.exit(0)
