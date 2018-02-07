@@ -1,0 +1,47 @@
+{
+        "result" : {
+          "event" : "Stoppage",
+          "eventCode" : "PIT535",
+          "eventTypeId" : "STOP",
+          "description" : "TV timeout"
+        },
+        "about" : {
+          "eventIdx" : 248,
+          "eventId" : 535,
+          "period" : 3,
+          "periodType" : "REGULAR",
+          "ordinalNum" : "3rd",
+          "periodTime" : "07:45",
+          "periodTimeRemaining" : "12:15",
+          "dateTime" : "2018-02-07T02:11:26Z",
+          "goals" : {
+            "away" : 3,
+            "home" : 5
+          }
+        },
+        "coordinates" : { }
+      }
+
+      {
+        "result" : {
+          "event" : "Stoppage",
+          "eventCode" : "PIT658",
+          "eventTypeId" : "STOP",
+          "description" : "Goalie Stopped"
+        },
+        "about" : {
+          "eventIdx" : 294,
+          "eventId" : 658,
+          "period" : 3,
+          "periodType" : "REGULAR",
+          "ordinalNum" : "3rd",
+          "periodTime" : "16:16",
+          "periodTimeRemaining" : "03:44",
+          "dateTime" : "2018-02-07T02:30:58Z",
+          "goals" : {
+            "away" : 4,
+            "home" : 5
+          }
+        },
+        "coordinates" : { }
+      }
