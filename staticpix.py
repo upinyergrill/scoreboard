@@ -10,16 +10,21 @@ now = datetime.datetime.now()
 date = now.strftime("%Y-%m-%d")
 
 teamId = '14'
-games = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + teamId + '?expand=team.schedule.next&expand=team.schedule.previous')
+games = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' +
+                     teamId + '?expand=team.schedule.next&expand=team.schedule.previous')
 parsed_games = (games.json())
 
-nextgamedate = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['date'])
+nextgamedate = (parsed_games['teams'][0]
+                ['nextGameSchedule']['dates'][0]['date'])
 if date == nextgamedate:
-        gamePK = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
+    gamePK = (parsed_games['teams'][0]['nextGameSchedule']
+              ['dates'][0]['games'][0]['gamePk'])
 else:
-        gamePK = (parsed_games['teams'][0]['previousGameSchedule']['dates'][0]['games'][0]['gamePk'])
+    gamePK = (parsed_games['teams'][0]['previousGameSchedule']
+              ['dates'][0]['games'][0]['gamePk'])
 
-gameinfo = requests.get('https://statsapi.web.nhl.com/api/v1/game/' + str(gamePK) + '/feed/live')
+gameinfo = requests.get(
+    'https://statsapi.web.nhl.com/api/v1/game/' + str(gamePK) + '/feed/live')
 parsed_gameinfo = (gameinfo.json())
 
 # RGBMatrix Options
@@ -28,7 +33,7 @@ options.rows = 32
 options.chain_length = 2
 options.brightness = 20
 
-matrix = RGBMatrix(options = options)
+matrix = RGBMatrix(options=options)
 font = graphics.Font()
 font.LoadFont('Assets/tom-thumb.bdf')
 color = graphics.Color(255, 255, 255)
@@ -71,7 +76,7 @@ try:
         away_sog = str(nhlgameinfo.awaySog())
         home_sog = str(nhlgameinfo.homeSog())
         if time_left == "Final":
-             time_left = "00:00"
+            time_left = "00:00"
 
         # with open('score.txt', 'r') as f:
         #     first_line = f.read()
