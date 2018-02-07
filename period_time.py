@@ -135,34 +135,42 @@ def get_game_time_and_period(game_data):
     # Game is live
     elif (game_data['abstractGameState'] == 'Live' and
           game_data['intermissionTimeRemaining'] == 0):
-
         info['period'] = game_data['currentPeriodOrdinal']
         info['time'] = game_data['currentPeriodTimeRemaining']
 
-        if len(game_data['stoppage']) >= 1:
-            # print 'has stoppage'
-            latest_stoppage = game_data['stoppage'][-1]
-            latest_stoppage_period = latest_stoppage['about']['period']
-            latest_stoppage_time_remaining = latest_stoppage['about']['periodTimeRemaining']
-
-            if game_data['currentPeriod'] == latest_stoppage_period:
-                time_remaining_seconds = get_seconds_from_string(
-                    game_data['currentPeriodTimeRemaining']
-                )
-                stoppage_time_remaining_seconds = get_seconds_from_string(
-                    latest_stoppage_time_remaining
-                )
-                if (time_remaining_seconds == stoppage_time_remaining_seconds or
-                        time_remaining_seconds == (stoppage_time_remaining_seconds + 1) or
-                        time_remaining_seconds == (stoppage_time_remaining_seconds - 1)):
-                    print 'game is stopped'
-                else:
-                    print 'start counter'
-        else:
-            #print 'no stoppage yet in game'
-            print 'start counter'
-
     return info
+
+
+def should_start_timer(game_data):
+    """determines if the timer should start
+    return boolean
+    """
+    if len(game_data['stoppage']) >= 1:
+        # print 'has stoppage'
+        latest_stoppage = game_data['stoppage'][-1]
+        latest_stoppage_period = latest_stoppage['about']['period']
+        latest_stoppage_time_remaining = latest_stoppage['about']['periodTimeRemaining']
+
+        if game_data['currentPeriod'] == latest_stoppage_period:
+            time_remaining_seconds = get_seconds_from_string(
+                game_data['currentPeriodTimeRemaining']
+            )
+            stoppage_time_remaining_seconds = get_seconds_from_string(
+                latest_stoppage_time_remaining
+            )
+            if (time_remaining_seconds == stoppage_time_remaining_seconds or
+                    time_remaining_seconds == (stoppage_time_remaining_seconds + 1) or
+                    time_remaining_seconds == (stoppage_time_remaining_seconds - 1)):
+                print 'don\'t start timer, game is stopped, '
+                return False
+            else:
+                print 'start timer, game has resume since last stoppage'
+        else:
+            print 'start timer, last stoppage was not in current period'
+    else:
+        print 'start timer, no stoppage yet in game'
+
+    return True
 
 
 GAME_DATA = get_game_data_from_file('exampleDataGameLive.json')
@@ -172,4 +180,7 @@ PARSED_GAME_DATA = get_parsed_game_data(GAME_DATA)
 
 GAME_TIME_AND_PERIOD = get_game_time_and_period(PARSED_GAME_DATA)
 
+TIMER = should_start_timer(PARSED_GAME_DATA)
+
 print GAME_TIME_AND_PERIOD
+print TIMER
