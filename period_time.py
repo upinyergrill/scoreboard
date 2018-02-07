@@ -135,12 +135,16 @@ def get_game_time_and_period(game_data):
     # Game is live
     elif (game_data['abstractGameState'] == 'Live' and
           game_data['intermissionTimeRemaining'] == 0):
+
         info['period'] = game_data['currentPeriodOrdinal']
+        info['time'] = game_data['currentPeriodTimeRemaining']
+
         if len(game_data['stoppage']) >= 1:
             # print 'has stoppage'
             latest_stoppage = game_data['stoppage'][-1]
             latest_stoppage_period = latest_stoppage['about']['period']
             latest_stoppage_time_remaining = latest_stoppage['about']['periodTimeRemaining']
+
             if game_data['currentPeriod'] == latest_stoppage_period:
                 time_remaining_seconds = get_seconds_from_string(
                     game_data['currentPeriodTimeRemaining']
@@ -152,12 +156,10 @@ def get_game_time_and_period(game_data):
                         time_remaining_seconds == (stoppage_time_remaining_seconds + 1) or
                         time_remaining_seconds == (stoppage_time_remaining_seconds - 1)):
                     print 'game is stopped'
-                    info['time'] = game_data['currentPeriodTimeRemaining']
                 else:
                     print 'start counter'
         else:
             #print 'no stoppage yet in game'
-            info['time'] = game_data['currentPeriodTimeRemaining']
             print 'start counter'
 
     return info
