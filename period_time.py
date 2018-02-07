@@ -1,4 +1,4 @@
-"""
+'''
     - get live data
     - parse currentPeriod
     - parse currentPeriodOrdinal
@@ -20,11 +20,11 @@
         - stoppage.count > 0
             - find the last stoppage
             - is stoppage in the same period
-                - if currentPeriodTimeRemaining == periodTimeRemaining (+/- 1 second (i saw be periodTimeRemaining 2 while currentPeriodTimeRemaining was 1))
+                - if currentPeriodTimeRemaining == periodTimeRemaining +/- 1 second
+                  i saw be periodTimeRemaining 2 while currentPeriodTimeRemaining was 1
                     - set time to periodTimeRemaining
                 - else
                     - start counter at currentPeriodTimeRemaining
-        - else 
+        - else
             - start counter at currentPeriodTimeRemaining
-    
-"""
+'''
