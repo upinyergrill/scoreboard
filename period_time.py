@@ -1,4 +1,11 @@
-'''
+"""period and time
+"""
+from __future__ import print_function
+import json
+import time
+
+
+"""
     - get live data
     - parse currentPeriod
     - parse currentPeriodOrdinal
@@ -29,8 +36,7 @@
                     - start counter at currentPeriodTimeRemaining
         - else
             - start counter at currentPeriodTimeRemaining
-'''
-import json
+"""
 
 
 def get_seconds_from_string(time_str):
@@ -146,7 +152,7 @@ def should_start_timer(game_data):
     return boolean
     """
     if len(game_data['stoppage']) >= 1:
-        # print 'has stoppage'
+        # print('has stoppage')
         latest_stoppage = game_data['stoppage'][-1]
         latest_stoppage_period = latest_stoppage['about']['period']
         latest_stoppage_time_remaining = latest_stoppage['about']['periodTimeRemaining']
@@ -161,26 +167,26 @@ def should_start_timer(game_data):
             if (time_remaining_seconds == stoppage_time_remaining_seconds or
                     time_remaining_seconds == (stoppage_time_remaining_seconds + 1) or
                     time_remaining_seconds == (stoppage_time_remaining_seconds - 1)):
-                print 'don\'t start timer, game is stopped, '
+                print('don\'t start timer, game is stopped')
                 return False
             else:
-                print 'start timer, game has resume since last stoppage'
+                print('start timer, game has resume since last stoppage')
         else:
-            print 'start timer, last stoppage was not in current period'
+            print('start timer, last stoppage was not in current period')
     else:
-        print 'start timer, no stoppage yet in game'
+        print('start timer, no stoppage yet in game')
 
     return True
 
 
-GAME_DATA = get_game_data_from_file('exampleDataGameLive.json')
-#GAME_DATA = get_game_data_from_file('exampleDataGameStopped.json')
-
-PARSED_GAME_DATA = get_parsed_game_data(GAME_DATA)
-
-GAME_TIME_AND_PERIOD = get_game_time_and_period(PARSED_GAME_DATA)
-
-TIMER = should_start_timer(PARSED_GAME_DATA)
-
-print GAME_TIME_AND_PERIOD
-print TIMER
+def countdown(seconds):
+    """countdown from stackoverlow
+    https://stackoverflow.com/a/25189629/1469690
+    """
+    while seconds:
+        mins, secs = divmod(seconds, 60)
+        timeformat = '{:02d}:{:02d}'.format(mins, secs)
+        print(timeformat)
+        time.sleep(1)
+        seconds -= 1
+    print('00:00')
