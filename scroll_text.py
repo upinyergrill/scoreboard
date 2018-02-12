@@ -41,8 +41,13 @@ class ScrollableText(object):
 
     def scroll(self, matrix, font, y, color, message):
         pos = 65
+        char_height = 5
         message_len = list(range(len(message) * 4 + pos))
         for _ in message_len:
+            for x_idx, _ in enumerate(list(range(64))):
+                for y_idx, _ in enumerate(list(range(char_height))):
+                    y_pixel = y - y_idx
+                    matrix.SetPixel(x_idx, y_pixel, 0, 0, 0)
             graphics.DrawText(matrix, font, pos, y, color, message)
             pos = pos - 1
             time.sleep(0.05)
