@@ -37,3 +37,12 @@ class ScrollableText(object):
             time.sleep(0.05)
             offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
             counter -= 1
+
+
+    def scroll(self, matrix, font, color, message):
+        pos = 65
+        message_len = len(message) * 4 + pos
+        for _ in message_len:
+            graphics.DrawText(matrix, font, pos, 31, color, message)
+            pos = pos - 1
+            time.sleep(0.05)
