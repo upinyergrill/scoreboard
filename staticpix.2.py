@@ -102,8 +102,9 @@ try:
                          [63, 28],
                          [63, 27],
                          [63, 22]]
+            border_color = [team_color[nhlgameinfo.teamID()]['r'], team_color[nhlgameinfo.teamID()]['g'], team_color[nhlgameinfo.teamID()]['b']]
             SCROLL_TEXT = ScrollableText()
-            SCROLL_TEXT.scroll(matrix, font, 31, color, message, border_pixels)
+            SCROLL_TEXT.scroll(matrix, font, 31, color, message, border_pixels, border_color)
             time.sleep(10)
             print("Cycling game info...")
         else:
