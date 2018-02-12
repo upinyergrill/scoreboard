@@ -6,7 +6,7 @@ import requests
 import datetime
 import json
 import importlib
-import subprocess
+from scroll_text import ScrollableText
 
 # RGBMatrix Options
 options = RGBMatrixOptions()
@@ -14,13 +14,13 @@ options.rows = 32
 options.chain_length = 2
 options.brightness = 15
 options.gpio_slowdown = 2
+options.drop_privileges = 0
 
 matrix = RGBMatrix(options = options)
 font = graphics.Font()
 font.LoadFont('Assets/tom-thumb.bdf')
 team_color = json.load(open('Assets/nhlcolors.json'))
 color = graphics.Color(255, 255, 255)
-#color_off = graphics.Color(0, 0, 0)
 
 def borders():
 
@@ -87,7 +87,8 @@ try:
             gametime = nhlgameinfo.gameTime()
             format_gametime = gametime.strftime('%a, %b %d, %I:%M%p')
             message = "NEXT GAME|" + format_gametime  + ""
-            subprocess.run(['sudo', 'python3', 'runtext.py', '-t', message])
+            scroll_text = ScrollableText()
+            scroll_text.run(message)
             time.sleep(10)
             print("Cycling game info...")
         else:
@@ -104,19 +105,11 @@ try:
                  time_left = str(nhlgameinfo.intTime())
 
             # Score positions
-            #graphics.DrawText(matrix, font, 36, 7, color_off, "88")
-            #graphics.DrawText(matrix, font, 36, 7, color_off, "11")
             graphics.DrawText(matrix, font, 36, 7, color, home_score)
-            #graphics.DrawText(matrix, font, 20, 7, color_off, "88")
-            #graphics.DrawText(matrix, font, 20, 7, color_off, "11")
             graphics.DrawText(matrix, font, 20, 7, color, away_score)
 
             # Shot on Goal positions
-            #graphics.DrawText(matrix, font, 41, 30, color_off, "88")
-            #graphics.DrawText(matrix, font, 41, 30, color_off, "11")
             graphics.DrawText(matrix, font, 41, 30, color, home_sog)
-            #graphics.DrawText(matrix, font, 15, 30, color_off, "88")
-            #graphics.DrawText(matrix, font, 15, 30, color_off, "11")
             graphics.DrawText(matrix, font, 15, 30, color, away_sog)
 
             # Team Abbrevaitions position
@@ -124,11 +117,7 @@ try:
             graphics.DrawText(matrix, font, 5, 7, color, away_team)
 
             # Time and Period positions
-            #graphics.DrawText(matrix, font, 22, 15, color_off, "88:88")
-            #graphics.DrawText(matrix, font, 22, 15, color_off, "11:11")
             graphics.DrawText(matrix, font, 22, 15, color, time_left)
-            #graphics.DrawText(matrix, font, 26, 21, color_off, "888")
-            #graphics.DrawText(matrix, font, 26, 21, color_off, "111")
             graphics.DrawText(matrix, font, 26, 21, color, period)
             graphics.DrawText(matrix, font, 26, 30, color, "SoG")
 
@@ -152,13 +141,6 @@ try:
                 graphics.DrawText(matrix, font, 49, 20, color, "+")
                 graphics.DrawText(matrix, font, 5, 15, color, "Box")
                 graphics.DrawText(matrix, font, 7, 20, color, "+")
-            #if (nhlgameinfo.homePowerPlay() == False) and (nhlgameinfo.awayPowerPlay() == False):
-                #graphics.DrawText(matrix, font, 47, 15, color_off, "Box")
-                #graphics.DrawText(matrix, font, 49, 20, color_off, "+")
-                #graphics.DrawText(matrix, font, 53, 20, color_off, "+")
-                #graphics.DrawText(matrix, font, 5, 15, color_off, "Box")
-                #graphics.DrawText(matrix, font, 7, 20, color_off, "+")
-                #graphics.DrawText(matrix, font, 11, 20, color_off, "+")
 
             time.sleep(15)
             print("Cycling game info...")

@@ -9,7 +9,7 @@ date = now.strftime("%Y-%m-%d")
 allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
 
 #Hardcoded for now until a selection menu is created or some conf file is referenced where you can manually pick
-teamId = '14'
+teamId = '5'
 
 allteams = requests.get('https://statsapi.web.nhl.com/api/v1/teams')
 teampick = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + teamId)

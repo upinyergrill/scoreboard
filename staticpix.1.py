@@ -15,6 +15,7 @@ options.rows = 32
 options.chain_length = 2
 options.brightness = 15
 options.gpio_slowdown = 2
+options.drop_privileges = 0
 
 matrix = RGBMatrix(options = options)
 font = graphics.Font()
