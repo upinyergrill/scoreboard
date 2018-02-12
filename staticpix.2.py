@@ -103,7 +103,7 @@ try:
                          [63, 27],
                          [63, 22]]
             SCROLL_TEXT = ScrollableText()
-            SCROLL_TEXT.scroll(matrix, font, 31, color, message)
+            SCROLL_TEXT.scroll(matrix, font, 31, color, message, border_pixels)
             time.sleep(10)
             print("Cycling game info...")
         else:
