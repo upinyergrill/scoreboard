@@ -92,6 +92,16 @@ try:
             #subprocess.run(['sudo', 'python3', 'runtext.py', '-t', message])
             #run_text.process()
             #run_text.run()
+            border_pixels = [[0, 30],
+                         [0, 29],
+                         [0, 28],
+                         [0, 27],
+                         [0, 26],
+                         [63, 30],
+                         [63, 29],
+                         [63, 28],
+                         [63, 27],
+                         [63, 22]]
             SCROLL_TEXT = ScrollableText()
             SCROLL_TEXT.scroll(matrix, font, 31, color, message)
             time.sleep(10)

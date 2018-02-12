@@ -16,8 +16,7 @@ class ScrollableText(object):
             options.gpio_slowdown = 2
             options.drop_privileges = 0
 
-        self.matrix = RGBMatrix(options = options)
-
+        self.matrix = RGBMatrix(options=options)
 
     def run(self, message):
         offscreen_canvas = self.matrix.CreateFrameCanvas()
@@ -27,9 +26,10 @@ class ScrollableText(object):
         pos = offscreen_canvas.width
         my_text = message
         counter = (len(my_text) * 4 + 65) * 3
-        while counter >=0:
+        while counter >= 0:
             offscreen_canvas.Clear()
-            lens = graphics.DrawText(offscreen_canvas, font, pos, 31, text_color, my_text)
+            lens = graphics.DrawText(
+                offscreen_canvas, font, pos, 31, text_color, my_text)
             pos -= 1
             if pos + lens < 0:
                 pos = offscreen_canvas.width
@@ -38,8 +38,9 @@ class ScrollableText(object):
             offscreen_canvas = self.matrix.SwapOnVSync(offscreen_canvas)
             counter -= 1
 
-
-    def scroll(self, matrix, font, y, color, message):
+    def scroll(self, matrix, font, y, color, message, border_pixels=None):
+        if not border_pixels:
+            border_pixels = []
         pos = 65
         char_height = 5
         message_len = list(range(len(message) * 4 + pos))
@@ -47,7 +48,8 @@ class ScrollableText(object):
             for x_idx, _ in enumerate(list(range(64))):
                 for y_idx, _ in enumerate(list(range(char_height))):
                     y_pixel = y - 1 - y_idx
-                    matrix.SetPixel(x_idx, y_pixel, 0, 0, 0)
+                    if [x_idx, y_idx] not in border_pixels:
+                        matrix.SetPixel(x_idx, y_pixel, 0, 0, 0)
             graphics.DrawText(matrix, font, pos, y, color, message)
             pos = pos - 1
             time.sleep(0.05)
