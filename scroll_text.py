@@ -48,7 +48,9 @@ class ScrollableText(object):
             for x_idx, _ in enumerate(list(range(64))):
                 for y_idx, _ in enumerate(list(range(char_height))):
                     y_pixel = y - 1 - y_idx
-                    if [x_idx, y_idx] not in border_pixels:
+                    #print([x_idx, y_idx])
+                    if [x_idx, y_pixel] not in border_pixels:
+                        #print([x_idx, y_pixel])
                         matrix.SetPixel(x_idx, y_pixel, 0, 0, 0)
             graphics.DrawText(matrix, font, pos, y, color, message)
             pos = pos - 1
