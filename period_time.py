@@ -206,6 +206,7 @@ def get_last_goal_info(game_data):
     """
     all_plays = game_data['liveData']['plays']['allPlays']
     goal_info = [d for d in all_plays if d['result']['event'] == 'Goal']
-    goal_info = goal_info[-1]
-    player = [d for d in goal_info['players'] if d['playerType'] == 'Scorer']
-    return player
+    if goal_info:
+        goal_info = goal_info[-1]
+        player = [d for d in goal_info['players'] if d['playerType'] == 'Scorer']
+        return player
