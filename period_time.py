@@ -22,7 +22,7 @@ import time
         - set time to intermissionTimeRemaining
         - set period to InT
         - start counter at intermissionTimeRemaining
-          not sure what intermissionTimeRemaining looks like when not 0, might be in minutes
+            intermissionTimeRemaining is in seconds
     - else if (abstractGameState == Live) && (intermissionTimeRemaining == 0) (game is live)
         - set period to currentPeriodOrdinal
         - get all stoppage events
@@ -136,7 +136,7 @@ def get_game_time_and_period(game_data):
     elif (game_data['abstractGameState'] == 'Live' and
           game_data['intermissionTimeRemaining'] != 0):
         info['period'] = "InT"
-        info['time'] = '20:00'
+        info['time'] = seconds_to_string(game_data['intermissionTimeRemaining'])
 
     # Game is live
     elif (game_data['abstractGameState'] == 'Live' and
@@ -151,6 +151,8 @@ def should_start_timer(game_data):
     """determines if the timer should start
     return boolean
     """
+    if game_data['intermissionTimeRemaining'] >= 1:
+        return True
     if len(game_data['stoppage']) >= 1:
         # print('has stoppage')
         latest_stoppage = game_data['stoppage'][-1]
@@ -179,13 +181,20 @@ def should_start_timer(game_data):
     return True
 
 
+def seconds_to_string(seconds):
+    """converts seconds to 00:00 format
+    """
+    mins, secs = divmod(seconds, 60)
+    timeformat = '{:02d}:{:02d}'.format(mins, secs)
+    return timeformat
+
+
 def countdown(seconds):
     """countdown from stackoverlow
     https://stackoverflow.com/a/25189629/1469690
     """
     while seconds:
-        mins, secs = divmod(seconds, 60)
-        timeformat = '{:02d}:{:02d}'.format(mins, secs)
+        timeformat = seconds_to_string(seconds)
         print(timeformat)
         time.sleep(1)
         seconds -= 1
