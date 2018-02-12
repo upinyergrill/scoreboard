@@ -39,10 +39,10 @@ class ScrollableText(object):
             counter -= 1
 
 
-    def scroll(self, matrix, font, color, message):
+    def scroll(self, matrix, font, y, color, message):
         pos = 65
-        message_len = len(message) * 4 + pos
+        message_len = list(range(len(message) * 4 + pos))
         for _ in message_len:
-            graphics.DrawText(matrix, font, pos, 31, color, message)
+            graphics.DrawText(matrix, font, pos, y, color, message)
             pos = pos - 1
             time.sleep(0.05)

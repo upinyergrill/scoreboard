@@ -92,7 +92,7 @@ try:
             #run_text.process()
             #run_text.run()
             SCROLL_TEXT = ScrollableText()
-            SCROLL_TEXT.scroll(matrix, font, color, message)
+            SCROLL_TEXT.scroll(matrix, font, 31, color, message)
             time.sleep(10)
             print("Cycling game info...")
         else:
