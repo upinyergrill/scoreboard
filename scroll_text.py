@@ -3,11 +3,11 @@ from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 
 
 class ScrollableText(object):
-    def __init__(self, options):
-        if not isinstance(options, RGBMatrixOptions):
-            raise ValueError('options must be type RGBMatrixOptions')
-
-        if not options:
+    def __init__(self, options=None):
+        if options:
+            if not isinstance(options, RGBMatrixOptions):
+                raise ValueError('options must be type RGBMatrixOptions')
+        else:
             # RGBMatrix Options
             options = RGBMatrixOptions()
             options.rows = 32
