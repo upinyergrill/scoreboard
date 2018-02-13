@@ -172,7 +172,8 @@ def should_start_timer(game_data):
                 print('don\'t start timer, game is stopped')
                 return False
             else:
-                print('start timer, game has resume since last stoppage')
+                # game has resume since last stoppage
+                print('start timer')
         else:
             print('start timer, last stoppage was not in current period')
     else:

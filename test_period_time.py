@@ -1,6 +1,5 @@
 """testing period time
 """
-from __future__ import print_function
 import period_time as pt
 
 GAME_DATA = pt.get_game_data_from_file('exampleDataGameLive.json')
