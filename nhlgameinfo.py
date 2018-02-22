@@ -7,7 +7,7 @@ import pytz, dateutil.parser
 #now = datetime.datetime.now()
 #date = now.strftime("%Y-%m-%d")
 
-teamId = '54'
+teamId = '5'
 games = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + teamId + '?expand=team.schedule.next&expand=team.schedule.previous')
 parsed_games = (games.json())
 
@@ -71,7 +71,7 @@ def homeOtl():
 def gameTime():
 	gamedate = (parsed_games['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gameDate'])
 	utctime = dateutil.parser.parse(gamedate)
-	return (utctime.astimezone(pytz.timezone("Canada/Eastern")))
+	return (utctime.astimezone(pytz.timezone("US/Eastern")))
 
 def intTime():
 	intTime = (parsed_gameinfo['liveData']['linescore']['intermissionInfo']['intermissionTimeRemaining'])
@@ -88,3 +88,50 @@ def awayPowerPlay():
 
 def homePowerPlay():
 	return (parsed_gameinfo['liveData']['linescore']['teams']['home']['powerPlay'])
+
+def awayHits():
+	return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['hits']))
+
+def homeHits():
+        return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['hits']))
+
+def awayBlocks():
+        return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['blocked']))
+
+def homeBlocks():
+        return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['blocked']))
+
+def awayTakeaways():
+        return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['takeaways']))
+
+def homeTakeaways():
+        return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['takeaways']))
+
+def awayGiveaways():
+        return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['giveaways']))
+
+def homeGiveaways():
+        return ("{0:0=2d}".format(parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['giveaways']))
+
+def awayFOWins():
+        return (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['faceOffWinPercentage'])
+
+def homeFOWins():
+        return (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['faceOffWinPercentage'])
+
+def awayPP():
+	converted = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['powerPlayGoals'])
+	total = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['powerPlayOpportunities'])
+	return (str(converted).split('.')[0] + "-" + str(total).split('.')[0])
+
+def homePP():
+        converted = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['powerPlayGoals'])
+        total = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['powerPlayOpportunities'])
+        return (str(converted).split('.')[0] + "-" + str(total).split('.')[0])
+
+def goalScored():
+	eventData = (parsed_gameinfo['liveData']['plays']['allPlays'])
+	for x in eventData:
+		if x['result']['event'] == 'Goal':
+			goalData = (x['result']['description'])
+			print(goalData)

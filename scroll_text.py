@@ -12,7 +12,7 @@ class ScrollableText(object):
             options = RGBMatrixOptions()
             options.rows = 32
             options.chain_length = 2
-            options.brightness = 15
+            options.brightness = 30
             options.gpio_slowdown = 2
             options.drop_privileges = 0
 
@@ -43,7 +43,7 @@ class ScrollableText(object):
             border_pixels = []
         pos = 65
         char_height = 5
-        message_len = list(range(len(message) * 4 + pos))
+        message_len = list(range(len(message) * 4 + 65))
         for _ in message_len:
             for x_idx, _ in enumerate(list(range(64))):
                 for y_idx, _ in enumerate(list(range(char_height))):

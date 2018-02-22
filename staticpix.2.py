@@ -13,7 +13,7 @@ from scroll_text import ScrollableText
 options = RGBMatrixOptions()
 options.rows = 32
 options.chain_length = 2
-options.brightness = 15
+options.brightness = 80
 options.gpio_slowdown = 2
 options.drop_privileges = 0
 
@@ -101,11 +101,11 @@ try:
                          [63, 29],
                          [63, 28],
                          [63, 27],
-                         [63, 22]]
+                         [63, 26]]
             border_color = [team_color[nhlgameinfo.teamID()]['r'], team_color[nhlgameinfo.teamID()]['g'], team_color[nhlgameinfo.teamID()]['b']]
             SCROLL_TEXT = ScrollableText()
             SCROLL_TEXT.scroll(matrix, font, 31, color, message, border_pixels, border_color)
-            time.sleep(10)
+            time.sleep(0.5)
             print("Cycling game info...")
         else:
             time_left = str(nhlgameinfo.timeLeft())
