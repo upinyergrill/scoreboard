@@ -53,10 +53,8 @@ def live_data(q):
             #pass
         time.sleep(5)
 
-def start_timer_logic(q):
-    timer_q = Queue()
-    p = Process(target=countdown, args=(timer_q,))
-    p.start()
+def start_timer_logic(q, timer_q):
+    
     game_time = None
     while True:
         try:
@@ -113,10 +111,19 @@ def countdown(timer_q):
 
 if __name__ == '__main__':
     q = Queue()
+
+    timer_q = Queue()
+
     p1 = Process(target=live_data, args=(q,))
-    p2 = Process(target=start_timer_logic, args=(q,))
+    p2 = Process(target=start_timer_logic, args=(q,timer_q,))
     p1.start()
     p2.start()
+
+    
+    p = Process(target=countdown, args=(timer_q,))
+    p.start()
+
+    print('countdown finished')
     p1.join()
-    p2.join()
+    print('you will not see this')
     
