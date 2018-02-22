@@ -9,8 +9,8 @@ import array
 
 def simulate_get_game_data(x):
     if x >= 3 and x <= 5:
-        return pt.get_game_data_from_file('exampleDataGameLive2.json')
-    elif x >= 5:
+        return pt.get_game_data_from_file('exampleDataGameStopped.json')
+    elif x > 5:
         return pt.get_game_data_from_file('exampleDataGameLive3.json')
     else:
         return pt.get_game_data_from_file('exampleDataGameLive.json')
@@ -87,6 +87,10 @@ def pc(q):
 def countdown(timer_q):
     seconds = timer_q.get()
     while True:
+        try:
+            seconds = timer_q.get(False)
+        except:
+            pass
         if seconds != 9999:
             while seconds:
                 timeformat = pt.seconds_to_string(seconds)
