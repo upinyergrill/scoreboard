@@ -42,9 +42,8 @@ app = Flask(__name__)
 
 # Shared memory value for storing team id
 shared_memory_team_id = Value('i', 0)
-
 # Shared memory for example data to show things are updating 
-shared_memory_data = Array('c', str.encode('{"t" 0,"m":0}'))
+shared_memory_data = Array('c', str.encode('{"t": 0, "m": 0}'))
 
 # Create the process for getting data in a loop
 nhl_data_process = Process(target=fetch_nhl_data, args=(shared_memory_team_id,shared_memory_data,))
