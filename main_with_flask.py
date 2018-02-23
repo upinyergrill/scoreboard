@@ -1,21 +1,10 @@
 #from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from multiprocessing import Process, Queue, Value
 from flask import Flask
-from rpyc.utils.server import ThreadedServer
-import rpyc
-
-# The REST API
-def rest_api(rest_api_queue):
-    ''' This will use Flask REST API
-        At a bare minimum it will have a route called
-        /team/:id where you can post to the int value
-        for the team that you would like to display
-        When a valid team id is matched, then it will send
-        a message via the rest_api_queue to the Board process '''
-    pass
+import json
 
 # The Board
-def board(rest_api_queue):
+def board():
     ''' This will need to listen to the rest_api_queue 
     for messages to switch teams and things like that '''
     
@@ -57,10 +46,17 @@ def board(rest_api_queue):
     pass
 
 # Download NHL Data
-def fetch_nhl_data():
+def fetch_nhl_data(team_id):
     ''' download data from the "next" URI and
         download data fro mthe "live" URI. '''
-    pass
+    schedule_next = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + team_id + '?expand=team.schedule.next')
+    schedule_next = (schedule_next.json())
+    try:
+        next_game_id = (schedule_next['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
+    except:
+        pass
+    live_game_data = requests.get('https://statsapi.web.nhl.com/api/v1/game/' + str(next_game_id) + '/feed/live')
+    live_game_data = (live_game_data.json())
 
 def determine_game_state():
     ''' This function determines the state of the game.
@@ -80,58 +76,30 @@ def determine_game_state():
             # turn off the board display 
     pass
 
-
+# makes the flask app work
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Index Page'
-
-@app.route('/team/<int:team_id>')
-def show_team(team_id):
-    conn = rpyc.connect("localhost", 40919)
-    c = conn.root
-    return 'User %d' % c.testthings(team_id)
-
-class MyService(rpyc.Service):
-    # this doesnt work either
-    ''' def __init__(self, needed_a_second_param):
-        self.smi = Value('i', 0) '''
-
-    def exposed_testthings(self, x):
-        # sucks the scope is mixed but idk what else to do
-        shared_memory_int.value = shared_memory_int.value + x
-        return shared_memory_int.value
-
 # Shared memory value
-shared_memory_int = Value('i', 0)
+shared_memory_team_id = Value('i', 1)
 
-# start the rpyc server
-server = ThreadedServer(MyService, port = 40919)
-c = Process(target=server.start)
-c.start()
-# don't need to join because flask is keeping the main thread open
+@app.route('/team/<int:team_id>', methods=['GET', 'POST'])
+def show_team(team_id):
+    # sucks that i'm violating scope 
+    # but I can't figure out how to make it a param
+    shared_memory_team_id.value = team_id
+    rtn = json.dumps({'team': shared_memory_team_id.value}, separators=(',',':'))
+    return rtn
 
-# can't use if __name__ == '__main__': becaue flask is dumb
+# flask cant use __name__ == '__main__'
 # This is the main process
 #if __name__ == '__main__':
-# Queue for the REST API to send infomration to the Board process
-rest_api_queue = Queue()
 
-# Create the REST API process
-rest_api_process = Process(target=rest_api, args=(rest_api_queue,))
+nhl_data_queue = Queue()
 
-# Create the Board process
-board_process = Process(target=board, args=(rest_api_queue,))
+nhl_data_process = Process(target=fetch_nhl_data, args=(shared_memory_team_id,))
 
-# Start the REST API
-rest_api_process.start()
+board_process = Process(target=board, args=(nhl_data_queue,))
 
-# Start the Board
+nhl_data_process.start()
+
 board_process.start()
-
-# Wait for the REST API to finsih (it never will)
-#rest_api_process.join()
-
-# Wait for the Board to finsih (it never will)
-#board_process.join()
