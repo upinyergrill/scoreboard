@@ -5,8 +5,11 @@
     3. then i ran flask
     python3 -m flask run
 '''
+''' Also had to install rpyc
+    1. pip3 install rpyc
+'''
 from flask import Flask
-from multiprocessing import Process, Value, Array
+from multiprocessing import Process, Value
 from rpyc.utils.server import ThreadedServer
 import rpyc
 import time
@@ -40,4 +43,3 @@ shared_memory_int = Value('i', 0)
 server = ThreadedServer(MyService, port = 40919)
 c = Process(target=server.start)
 c.start()
-
