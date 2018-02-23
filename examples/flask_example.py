@@ -5,41 +5,17 @@
     3. then i ran flask
     python3 -m flask run
 '''
-''' Also had to install rpyc
-    1. pip3 install rpyc
-'''
 from flask import Flask
-from multiprocessing import Process, Value
-from rpyc.utils.server import ThreadedServer
-import rpyc
-import time
+from multiprocessing import  Value
 
 app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return 'Index Page'
-
-@app.route('/team/<int:team_id>')
-def show_team(team_id):
-    conn = rpyc.connect("localhost", 40919)
-    c = conn.root
-    return 'User %d' % c.testthings(team_id)
-
-class MyService(rpyc.Service):
-    # this doesnt work either
-    ''' def __init__(self, needed_a_second_param):
-        self.smi = Value('i', 0) '''
-
-    def exposed_testthings(self, x):
-        # sucks the scope is mixed but idk what else to do
-        shared_memory_int.value = shared_memory_int.value + x
-        return shared_memory_int.value
 
 # Shared memory value
 shared_memory_int = Value('i', 0)
 
-# start the rpyc server
-server = ThreadedServer(MyService, port = 40919)
-c = Process(target=server.start)
-c.start()
+@app.route('/team/<int:team_id>', methods=['GET', 'POST'])
+def show_team(team_id):
+    # sucks that i'm violating scope 
+    # but I can't figure out how to make it a param
+    shared_memory_int.value = shared_memory_int.value + team_id
+    return 'User %d' % shared_memory_int.value
