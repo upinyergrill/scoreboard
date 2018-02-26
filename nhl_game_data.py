@@ -1,6 +1,21 @@
 import time
+import requests
+import json
 import datetime
 import pytz, dateutil.parser
+
+def fetch_pre_game_data(team_id):
+    '''fetches scheduled game info (gamepk number and team records)
+    NOTE: team_id is an INT
+    '''
+    game = requests.get('https://statsapi.web.nhl.com/api/v1/teams/' + str(team_id) + '?expand=team.schedule.next')
+    return game.json()
+
+def fetch_live_game_data(game_id):
+    '''fetches live game data for the the selected team's game
+    '''
+    game_info = requests.get('https://statsapi.web.nhl.com/api/v1/game/' + game_id + '/feed/live')
+    return game_info.json()
 
 def get_all_stoppage(game_data):
     """gets all stoppage events from unparsed game data
@@ -153,6 +168,10 @@ def get_parsed_pre_game_data(game_data):
     """parses pre game data
     """
     game = {}
+
+    game['gameId'] = (
+        str(game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
+    )
 
     game['awayWin'] = (
         game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['teams']['away']['leagueRecord']['wins']
