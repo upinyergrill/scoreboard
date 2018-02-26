@@ -1,4 +1,4 @@
-#from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
+from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from multiprocessing import Value, Process, Queue, Array
 from flask import Flask
 import json
@@ -29,11 +29,27 @@ def board(rest_api_queue):
     #rest_api_queue = Queue()
     #board_process = Process(target=board, args=(rest_api_queue,))
     #board_process.start()
+
+    # RGBMatrix Options
+    options = RGBMatrixOptions()
+    options.rows = 32
+    options.chain_length = 2
+    options.brightness = 30
+    options.gpio_slowdown = 2
+    options.drop_privileges = 0
+
+    matrix = RGBMatrix(options = options)
+    font = graphics.Font()
+    font.LoadFont('Assets/tom-thumb.bdf')
+    team_color = json.load(open('Assets/nhlcolors.json'))
+    color = graphics.Color(255, 255, 255)
+    color_off = graphics.Color(0, 0, 0)
+
     while True:
         try:
             game_data = rest_api_queue.get(False)
             if (game_data['gameState'] == "Preview"):
-                nlhboardrender.preview(game_data)
+                nhlboardrender.preview(matrix, font, color, game_data)
                 #pass
             elif(game_data['gameState'] == "Live"):
                 pass
