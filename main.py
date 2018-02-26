@@ -1,5 +1,9 @@
 #from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
-from multiprocessing import Process, Queue
+from multiprocessing import Value, Process, Queue, Array
+from flask import Flask
+import json
+import time
+import nhl_game_data as nlhgamedata
 
 # The REST API
 def rest_api(rest_api_queue):
@@ -13,22 +17,6 @@ def rest_api(rest_api_queue):
 
 # The Board
 def board(rest_api_queue):
-    ''' This will need to listen to the rest_api_queue 
-    for messages to switch teams and things like that '''
-    
-    ''' This process need to have a sub prrocess for 
-        getting game data, it will call both 
-        the "next" and the "live" data URIs '''
-    
-    # Create Fetch NHL Data proces
-    fetch_nhl_data_process = Process(target=fetch_nhl_data, args=())
-    
-    # Start Fetch NHL Data process
-    fetch_nhl_data_process.start()
-    
-    # Wait for Fetch NHL Data to finish (it never will)
-    #fetch_nhl_data_process.join()
-    
     ''' The main function of the Board process should be waiting
         for the REST API process to send it data
         
@@ -37,18 +25,9 @@ def board(rest_api_queue):
         getting and display data on the board '''
     while True:
         try:
-            message_from_rest_api = rest_api_queue.get(False)
-            ''' Need a function for processing the data from the rest api
-                Probably should send an object from the rest api of the
-                function and the value
-                something like... 
-                    {
-                        "function": "changeTeam"
-                        "value": 17
-                    } 
-                Changing the team will need to tell the fetch_nhl_data
-                function to use a differnt URIs but also will need to
-                tell the function for what colors to use to update. '''
+            game_data = rest_api_queue.get(False)
+            if (game_data.gameState)
+            pass
         except:
             pass
     pass
@@ -77,25 +56,120 @@ def determine_game_state():
             # turn off the board display 
     pass
 
-# This is the main process
-if __name__ == '__main__':
-    # Queue for the REST API to send infomration to the Board process
-    rest_api_queue = Queue()
+def get_settings():
+    """imports json data
+    """
+    return json.load(open('settings.json'))
 
-    # Create the REST API process
-    rest_api_process = Process(target=rest_api, args=(rest_api_queue,))
+def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue):
+    # At runtime set the shared_mem_team value (the settings team id)
+    # to the current team id 
+    current_team_id = shared_mem_team.value
+    # game state get set later by fetch and parse
+    game_state = None
+    # Never break from outer loop
+    while True:
+        '''if the game_state is not set then do this
+            but if the game_state is set and 
+            current_team_id does not equal shared_mem_team.value then do this
+        '''
+        ''' First get the pre_game_data so we can find out waht the next game is
+            then get the data for that game, and determine if it is live or not
+        '''
+        if is game_state None:
+            # get pre game data
+            pre_game_data = nlhgamedata.fetch_pre_game_data(shared_mem_team.value)
+            parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
+        elif game_state is not None and current_team_id != shared_mem_team.value:
+            # get pre game data 
+            pre_game_data = nlhgamedata.fetch_pre_game_data(shared_mem_team.value)
+            parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
+        elif game_state == "Final" and 
+
+        # Store what the current team is for later comparison
+        current_team_id = shared_mem_team.value
+
+        ''' In production code we would be getting data from URL
+            and would be sending the data via Queues         
+        '''
+
+        # if there is not a game coming anytime soon,
+        # we want to slee for a longer time
+        seconds_to_sleep = 10
+        if is parsed_pre_game_data.gameId None:
+            seconds_to_sleep = 86400
+
+        # The final gameState data will only be donwloaded once
+        if (game_state != "Final"):
+            live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data.gameId)
+            parsed_live_game_data = nlhgamedata.get_parsed_live_data(live_game_data)
+
+            ''' Check if the game is live or not
+                Depending on the game state, tell the board to disply different things
+            '''
+            game_state = parsed_live_game_data.gameState
+
+            if (game_state == "Preview"):
+                parsed_pre_game_data['gameState']
+                rest_api_queue.put(parsed_pre_game_data)
+            elif (game_state == "Live"):
+                rest_api_queue.put(parsed_live_game_data)
+                pass
+            elif (game_state == "Final"):
+                rest_api_queue.put(parsed_live_game_data)
+            # We will modifly the Previe and FInal if statemtns based on this extra info
+            #elif (if the game has ended more than 15 minutes ago shut off the board)
+            #elif (if the game is going to start in 15 minutes or less then turn on the board)
     
-    # Create the Board process
-    board_process = Process(target=board, args=(rest_api_queue,))
-    
-    # Start the REST API
-    rest_api_process.start()
+        # 10 second sleep function
+        timeout = time.time() + seconds_to_sleep
+        while True:
+            # While we are sleeping check ever 0.25 seconds 
+            # if the API updated the team id
+            if current_team_id != shared_mem_team.value:
+                break
+            else:
+                # if it's been 10 seconds break
+                if time.time() > timeout:
+                    break
+                else:
+                    time.sleep(0.25)
 
-    # Start the Board
-    board_process.start()
 
-    # Wait for the REST API to finsih (it never will)
-    rest_api_process.join()
+# this makes the flask app run
+app = Flask(__name__)
 
-    # Wait for the Board to finsih (it never will)
-    board_process.join()
+# Queue for the REST API to send infomration to the Board process
+rest_api_queue = Queue()
+
+# Get the user settings 
+settings = get_settings()
+
+# At runtime set the team id to what was stored in settings
+shared_memory_team_id = Value('i', settings.team_id)
+
+# Shared memory for example data to show things are updating 
+shared_memory_data = Array('c', str.encode('{"t": 0, "m": 0}'))
+
+# Create the process for getting data in a loop
+nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(set_team_and_fetch_nhl_data,shared_memory_data,rest_api_queue,))
+nhl_data_process.start()
+
+# Create the process for running the board
+board_process = Process(target=board, args=(rest_api_queue,))
+board_process.start()
+
+@app.route('/team/<int:team_id>', methods=['GET', 'POST'])
+def update_team(team_id):
+    # sucks that i'm violating scope 
+    # but I can't figure out how to make it a param
+    with shared_memory_team_id.get_lock():
+        shared_memory_team_id.value = team_id
+    rtn = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
+    return rtn
+
+@app.route('/team', methods=['GET', 'POST'])
+def show_team():
+    # sucks that i'm violating scope 
+    # but I can't figure out how to make it a param
+    return shared_memory_data.value.decode()

@@ -169,9 +169,12 @@ def get_parsed_pre_game_data(game_data):
     """
     game = {}
 
-    game['gameId'] = (
-        str(game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
-    )
+    if not game_data['teams'][0]['nextGameSchedule']['dates']:
+        game['gameId'] = None
+    else:
+        game['gameId'] = (
+            str(game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gamePk'])
+        )
 
     game['awayWin'] = (
         game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['teams']['away']['leagueRecord']['wins']
