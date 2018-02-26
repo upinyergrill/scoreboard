@@ -190,7 +190,7 @@ shared_memory_team_id = Value('i', settings['team_id'])
 shared_memory_data = Array('c', str.encode('{"t": 0, "m": 0}'))
 
 # Create the process for getting data in a loop
-nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(set_team_and_fetch_nhl_data,shared_memory_data,rest_api_queue,))
+nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,shared_memory_data,rest_api_queue,))
 nhl_data_process.start()
 
 # Create the process for running the board
@@ -211,3 +211,5 @@ def show_team():
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
     return shared_memory_data.value.decode()
+
+app.run(host='0.0.0.0')
