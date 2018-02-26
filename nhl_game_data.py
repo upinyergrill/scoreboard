@@ -145,13 +145,15 @@ def get_parsed_live_game_data(game_data):
         game_data['liveData']['linescore']['currentPeriod']
     )
 
-    game['currentPeriodOrdinal'] = (
-        game_data['liveData']['linescore']['currentPeriodOrdinal']
-    )
+    if 'currentPeriodOrdinal' in game_data['liveData']['linescore']:
+        game['currentPeriodOrdinal'] = (
+            game_data['liveData']['linescore']['currentPeriodOrdinal']
+        )
 
-    game['currentPeriodTimeRemaining'] = (
-        game_data['liveData']['linescore']['currentPeriodTimeRemaining']
-    )
+    if 'currentPeriodTimeRemaining' in game_data['liveData']['linescore']:
+        game['currentPeriodTimeRemaining'] = (
+            game_data['liveData']['linescore']['currentPeriodTimeRemaining']
+        )
 
     game['intermissionTimeRemaining'] = (
         game_data['liveData']['linescore']['intermissionInfo']['intermissionTimeRemaining']
