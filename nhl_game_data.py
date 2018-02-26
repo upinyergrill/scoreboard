@@ -154,6 +154,11 @@ def get_parsed_live_game_data(game_data):
         game_data['liveData']['linescore']['intermissionInfo']['intermissionTimeRemaining']
     )
 
+    if 'endDateTime' in game_data['gameData']['datetime']:
+        game['endTime'] = (
+            dateutil.parser.parse(game_data['gameData']['datetime']['endDateTime'])
+        )
+
     game['stoppage'] = (
         get_all_stoppage(game_data)
     )
