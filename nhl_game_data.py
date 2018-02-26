@@ -194,6 +194,10 @@ def get_parsed_pre_game_data(game_data):
         game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['teams']['home']['leagueRecord']['wins']
     )
 
+    game['homeTeam'] = (
+        game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['teams']['home']['team']['name']
+    )
+
     game['awayLoss'] = (
         game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['teams']['away']['leagueRecord']['losses']
     )

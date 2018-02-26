@@ -45,11 +45,18 @@ def board(rest_api_queue):
     color = graphics.Color(255, 255, 255)
     color_off = graphics.Color(0, 0, 0)
 
+
+    print('the board started')
+
     while True:
         try:
             game_data = rest_api_queue.get(False)
+            print('board got game data')
+            print(game_data)
             if (game_data['gameState'] == "Preview"):
+                print('should render')
                 nhlboardrender.preview(matrix, font, color, game_data)
+                print('is it blocking code?')
                 #pass
             elif(game_data['gameState'] == "Live"):
                 pass
@@ -142,17 +149,21 @@ def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue
                 Depending on the game state, tell the board to disply different things
             '''
             game_state = parsed_live_game_data['gameState']
-
+            print(game_state)
             if (game_state == "Preview"):
                 # now both pre and live have gameState
                 parsed_pre_game_data['gameState'] = "Preview"
                 rest_api_queue.put(parsed_pre_game_data)
                 seconds_to_sleep = 60
+                print('is preview')
             elif (game_state == "Live"):
                 rest_api_queue.put(parsed_live_game_data)
-                pass
+                print('is live')
             elif (game_state == "Final"):
                 rest_api_queue.put(parsed_live_game_data)
+                print('is final')
+            else:
+                print('not any of those')
             # We will modifly the Previe and FInal if statemtns based on this extra info
             #elif (if the game has ended more than 15 minutes ago shut off the board)
             #elif (if the game is going to start in 15 minutes or less then turn on the board)
