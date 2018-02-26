@@ -3,7 +3,8 @@ from multiprocessing import Value, Process, Queue, Array
 from flask import Flask
 import json
 import time
-import nhl_game_data as nlhgamedata
+import nhl_game_data as nhlgamedata
+import nhl_board_render as nhlboardrender
 from datetime import datetime
 
 # The REST API
@@ -24,10 +25,20 @@ def board(rest_api_queue):
         The process should also handle starting and stopping
         all the other sub processes for 
         getting and display data on the board '''
+    # Create the process for running the board
+    #rest_api_queue = Queue()
+    #board_process = Process(target=board, args=(rest_api_queue,))
+    #board_process.start()
     while True:
         try:
             game_data = rest_api_queue.get(False)
-            if (game_data.gameState)
+            if (game_data['gameState'] == "Preview"):
+                nlhboardrender.preview(game_data)
+                #pass
+            elif(game_data['gameState'] == "Live"):
+                pass
+            elif(game_data['gameState'] == "Final"):
+                pass
             pass
         except:
             pass
@@ -79,18 +90,18 @@ def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue
             then get the data for that game, and determine if it is live or not
         '''
         fifteen_mintes_from_now = time.time() + 900
-        if is game_state None:
+        if game_state is None:
             # get pre game data
-            pre_game_data = nlhgamedata.fetch_pre_game_data(shared_mem_team.value)
+            pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
         elif game_state is not None and current_team_id != shared_mem_team.value:
             # get pre game data 
-            pre_game_data = nlhgamedata.fetch_pre_game_data(shared_mem_team.value)
+            pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
         # we can assume game_end_time will be populated because the state is fian
         # what we want to do here is if the game has ended, this is how we tell it to get the next game
-        elif game_state == "Final" and game_end_time > fifteen_mintes_from_now
-            pre_game_data = nlhgamedata.fetch_pre_game_data(shared_mem_team.value)
+        elif game_state == "Final" and game_end_time > fifteen_mintes_from_now:
+            pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
         
         # Store what the current team is for later comparison
@@ -103,22 +114,24 @@ def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue
         # if there is not a game coming anytime soon,
         # we want to slee for a longer time
         seconds_to_sleep = 10
-        if is parsed_pre_game_data.gameId None:
+        if parsed_pre_game_data['gameId'] is None:
             seconds_to_sleep = 86400
 
         # The final gameState data will only be donwloaded once
         if (game_state != "Final"):
-            live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data.gameId)
-            parsed_live_game_data = nlhgamedata.get_parsed_live_data(live_game_data)
+            live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data['gameId'])
+            parsed_live_game_data = nhlgamedata.get_parsed_live_game_data(live_game_data)
 
             ''' Check if the game is live or not
                 Depending on the game state, tell the board to disply different things
             '''
-            game_state = parsed_live_game_data.gameState
+            game_state = parsed_live_game_data['gameState']
 
             if (game_state == "Preview"):
-                parsed_pre_game_data['gameState']
+                # now both pre and live have gameState
+                parsed_pre_game_data['gameState'] = "Preview"
                 rest_api_queue.put(parsed_pre_game_data)
+                seconds_to_sleep = 60
             elif (game_state == "Live"):
                 rest_api_queue.put(parsed_live_game_data)
                 pass
@@ -128,7 +141,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue
             #elif (if the game has ended more than 15 minutes ago shut off the board)
             #elif (if the game is going to start in 15 minutes or less then turn on the board)
         else:
-            game_end_time = time.mktime(parsed_live_game_data.endTime.timetuple())
+            game_end_time = time.mktime(parsed_live_game_data['endTime'].timetuple())
 
         # 10 second sleep function
         timeout = time.time() + seconds_to_sleep
@@ -155,7 +168,7 @@ rest_api_queue = Queue()
 settings = get_settings()
 
 # At runtime set the team id to what was stored in settings
-shared_memory_team_id = Value('i', settings.team_id)
+shared_memory_team_id = Value('i', settings['team_id'])
 
 # Shared memory for example data to show things are updating 
 shared_memory_data = Array('c', str.encode('{"t": 0, "m": 0}'))

@@ -2,7 +2,10 @@ import time
 import requests
 import json
 import datetime
-import pytz, dateutil.parser
+# pip3 install pytz
+import pytz
+# pip3 install python-dateutil
+import dateutil.parser
 
 def fetch_pre_game_data(team_id):
     '''fetches scheduled game info (gamepk number and team records)
