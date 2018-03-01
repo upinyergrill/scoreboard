@@ -212,6 +212,12 @@ board_process.start()
 def update_team(team_id):
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
+    ''' Todo
+        use https://statsapi.web.nhl.com/api/v1/teams
+        to pull down all the valid team ids
+        so do this at startup of the program. maybe store it in a file.
+        actaully you could use a shared memory array, i think 
+    '''
     with shared_memory_team_id.get_lock():
         shared_memory_team_id.value = team_id
     rtn = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))

@@ -151,9 +151,12 @@ def get_parsed_live_game_data(game_data):
         )
 
     if 'currentPeriodTimeRemaining' in game_data['liveData']['linescore']:
-        game['currentPeriodTimeRemaining'] = (
-            game_data['liveData']['linescore']['currentPeriodTimeRemaining']
-        )
+        if (game_data['liveData']['linescore']['currentPeriodTimeRemaining'] == 'END'):
+            game['currentPeriodTimeRemaining'] = '00:00'
+        else:
+            game['currentPeriodTimeRemaining'] = (
+                game_data['liveData']['linescore']['currentPeriodTimeRemaining']
+            )
 
     game['intermissionTimeRemaining'] = (
         game_data['liveData']['linescore']['intermissionInfo']['intermissionTimeRemaining']
