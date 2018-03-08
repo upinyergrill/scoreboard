@@ -249,6 +249,6 @@ def update_team(team_id):
 def show_team():
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
-    return shared_memory_team_id.value
+    return str(shared_memory_team_id.value)
 
 app.run(host='0.0.0.0')
