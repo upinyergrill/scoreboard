@@ -54,7 +54,8 @@ def board(rest_api_queue):
     while True:
         try:
             game_data = rest_api_queue.get(False)
-            print('board got game data')
+            print('omg')
+            ''' print('board got game data')
             print(game_data)
 
             #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
@@ -70,7 +71,7 @@ def board(rest_api_queue):
             elif(game_data['gameState'] == "Live"):
                 pass
             elif(game_data['gameState'] == "Final"):
-                pass
+                pass '''
             pass
         except:
             pass
@@ -180,7 +181,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
                 seconds_to_sleep = 60
                 print('is preview')
             elif (game_state == "Live"):
-                rest_api_queue.put(parsed_pre_game_data)
+                rest_api_queue.put(parsed_live_game_data)
                 print('is live')
             # would never hit this becuase game_state != "Final"
             #elif (game_state == "Final"):
