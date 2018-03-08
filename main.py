@@ -57,8 +57,9 @@ def board(rest_api_queue):
             print('board got game data')
             print(game_data)
 
-            nhlboardrender.draw_outer_border(matrix, font, team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
-            nhlboardrender.draw_time_period_border(matrix, font, team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
+            print(team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
+            #nhlboardrender.draw_outer_border(matrix, font, team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
+            #nhlboardrender.draw_time_period_border(matrix, font, team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
 
             if (game_data['gameState'] == "Preview"):
                 print('should render')
