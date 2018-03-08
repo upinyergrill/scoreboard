@@ -54,7 +54,6 @@ def board(rest_api_queue):
     while True:
         try:
             game_data = rest_api_queue.get(False)
-            print('omg')
             print('board got game data')
             print(game_data)
             
