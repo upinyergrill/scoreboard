@@ -151,7 +151,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
 
         # The final gameState data will only be donwloaded once
         # Also make sure there is a next gameId
-        if (game_state != "Final" and parsed_pre_game_data['gameId'] is not None):
+        if (game_state != "Final" or parsed_pre_game_data['gameId'] is not None):
             live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data['gameId'])
             parsed_live_game_data = nhlgamedata.get_parsed_live_game_data(live_game_data)
 
@@ -190,7 +190,8 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
             #elif (if the game has ended more than 15 minutes ago shut off the board)
             #elif (if the game is going to start in 15 minutes or less then turn on the board)
         else:
-            game_end_time = time.mktime(parsed_live_game_data['endTime'].timetuple())
+            if 'endTime' in parsed_live_game_data:
+                game_end_time = time.mktime(parsed_live_game_data['endTime'].timetuple())
 
         # 10 second sleep function
         timeout = time.time() + seconds_to_sleep
