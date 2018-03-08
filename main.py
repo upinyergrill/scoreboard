@@ -105,7 +105,7 @@ def get_settings():
     """
     return json.load(open('settings.json'))
 
-def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue):
+def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
     # At runtime set the shared_mem_team value (the settings team id)
     # to the current team id 
     current_team_id = shared_mem_team.value
@@ -220,17 +220,17 @@ settings = get_settings()
 shared_memory_team_id = Value('i', settings['team_id'])
 
 # Shared memory for example data to show things are updating 
-shared_memory_data = Array('c', str.encode('{"t": 0, "m": 0}'))
+#shared_memory_data = Array('c', str.encode('{"t": 0, "m": 0}'))
 
 # Create the process for getting data in a loop
-nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,shared_memory_data,rest_api_queue,))
+nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,))
 nhl_data_process.start()
 
 # Create the process for running the board
 board_process = Process(target=board, args=(rest_api_queue,))
 board_process.start()
 
-@app.route('/team/<int:team_id>', methods=['GET', 'POST'])
+@app.route('/team/<int:team_id>', methods=['POST'])
 def update_team(team_id):
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
@@ -245,10 +245,10 @@ def update_team(team_id):
     rtn = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
     return rtn
 
-@app.route('/team', methods=['GET', 'POST'])
+@app.route('/team', methods=['GET'])
 def show_team():
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
-    return shared_memory_data.value.decode()
+    return shared_memory_team_id.value
 
 app.run(host='0.0.0.0')
