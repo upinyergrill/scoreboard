@@ -46,7 +46,7 @@ def board(rest_api_queue):
     matrix = RGBMatrix(options = options)
     font = graphics.Font()
     font.LoadFont('Assets/tom-thumb.bdf')
-    team_colors = json.load(open('Assets/nhlcolors.json'))
+    team_color = json.load(open('Assets/nhlcolors.json'))
     color = graphics.Color(255, 255, 255)
 
     print('the board started')
@@ -57,7 +57,7 @@ def board(rest_api_queue):
             print('board got game data')
             print(game_data)
 
-            print(team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
+            print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             #nhlboardrender.draw_outer_border(matrix, font, team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
             #nhlboardrender.draw_time_period_border(matrix, font, team_colors[game_data['currentTeamId']]['r'], team_colors[game_data['currentTeamId']]['g'], team_colors[game_data['currentTeamId']]['b'])
 
