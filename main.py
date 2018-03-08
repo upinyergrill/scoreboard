@@ -46,10 +46,8 @@ def board(rest_api_queue):
     matrix = RGBMatrix(options = options)
     font = graphics.Font()
     font.LoadFont('Assets/tom-thumb.bdf')
-    team_color = json.load(open('Assets/nhlcolors.json'))
+    team_colors = json.load(open('Assets/nhlcolors.json'))
     color = graphics.Color(255, 255, 255)
-    color_off = graphics.Color(0, 0, 0)
-
 
     print('the board started')
 
@@ -58,6 +56,11 @@ def board(rest_api_queue):
             game_data = rest_api_queue.get(False)
             print('board got game data')
             print(game_data)
+
+            current_team_color = graphics.Color(team_colors[game_data['currentTeamId']['r']], team_colors[game_data['currentTeamId']['g']], team_colors[game_data['currentTeamId']['b']])
+            nhlboardrender.draw_outer_border(matrix, font, current_team_color)
+            nhlboardrender.draw_time_period_border(matrix, font, current_team_color)
+
             if (game_data['gameState'] == "Preview"):
                 print('should render')
                 nhlboardrender.preview(matrix, font, color, game_data)
@@ -149,6 +152,13 @@ def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue
         if (game_state != "Final"):
             live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data['gameId'])
             parsed_live_game_data = nhlgamedata.get_parsed_live_game_data(live_game_data)
+
+            ''' We need to add current_team_id to pre_game and live_game
+                data so that our color can be chosen based on what the user
+                chose for which team, that is which team number the rest api received
+            '''
+            parsed_pre_game_data['currentTeamId'] = current_team_id
+            parsed_live_game_data['currentTeamId'] = current_team_id
 
             ''' Check if the game is live or not
                 Depending on the game state, tell the board to disply different things
