@@ -57,11 +57,11 @@ def board(rest_api_queue):
             print('omg')
             print('board got game data')
             print(game_data)
-            '''
+            
             #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-
+            '''
             if (game_data['gameState'] == "Preview"):
                 print('should render')
                 nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
