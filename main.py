@@ -7,6 +7,11 @@ import nhl_game_data as nhlgamedata
 import nhl_board_render as nhlboardrender
 from datetime import datetime
 
+''' su
+    export FLASK_APP=flask_example.py
+    python3 -m flash run
+'''
+
 # The REST API
 def rest_api(rest_api_queue):
     ''' This will use Flask REST API
