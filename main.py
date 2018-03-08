@@ -61,7 +61,7 @@ def board(rest_api_queue):
             #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-            '''
+            
             if (game_data['gameState'] == "Preview"):
                 print('should render')
                 nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
@@ -71,7 +71,7 @@ def board(rest_api_queue):
             elif(game_data['gameState'] == "Live"):
                 pass
             elif(game_data['gameState'] == "Final"):
-                pass '''
+                pass
             pass
         except:
             pass
