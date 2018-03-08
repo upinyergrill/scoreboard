@@ -1,10 +1,10 @@
 from rgbmatrix import graphics
 
 def draw_away_team_pre_game(matrix, font, color, game_data):
-    clear_area(matrix, 5, 7, 15, 6)
-    clear_area(matrix, 3, 13, 20, 6)
-    clear_area(matrix, 3, 19, 20, 6)
-    clear_area(matrix, 3, 25, 20, 6)
+    clear_area(matrix, 5, 7, 12, 6)
+    clear_area(matrix, 3, 13, 15, 6)
+    clear_area(matrix, 3, 19, 15, 6)
+    clear_area(matrix, 3, 25, 15, 6)
     graphics.DrawText(matrix, font, 5, 7, color, str(game_data['awayTeam']))
     graphics.DrawText(matrix, font, 3, 13, color, "W-" + str(game_data['awayWin']))
     graphics.DrawText(matrix, font, 3, 19, color, "L-" + str(game_data['awayLoss']))
@@ -48,10 +48,10 @@ def draw_outer_border(matrix, font, r, g, b):
         matrix.SetPixel(x, 31, r, g, b)
 
 def draw_home_team_pre_game(matrix, font, color, game_data):
-    clear_area(matrix, 48, 7, 15, 6)
-    clear_area(matrix, 46, 13, 20, 6)
-    clear_area(matrix, 46, 19, 20, 6)
-    clear_area(matrix, 46, 25, 20, 6)
+    clear_area(matrix, 48, 7, 12, 6)
+    clear_area(matrix, 46, 13, 15, 6)
+    clear_area(matrix, 46, 19, 15, 6)
+    clear_area(matrix, 46, 25, 15, 6)
     home_team = str(game_data['homeTeam'])
     home_win = "W-" + str(game_data['homeWin']) + ""
     home_lose = "L-" + str(game_data['homeLoss']) + ""

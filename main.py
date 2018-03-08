@@ -150,9 +150,15 @@ def set_team_and_fetch_nhl_data(shared_mem_team, shared_mem_data, rest_api_queue
             seconds_to_sleep = 86400
 
         # The final gameState data will only be donwloaded once
-        if (game_state != "Final"):
+        # Also make sure there is a next gameId
+        if (game_state != "Final" and parsed_pre_game_data['gameId'] is not None):
             live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data['gameId'])
             parsed_live_game_data = nhlgamedata.get_parsed_live_game_data(live_game_data)
+
+            ''' We need abbrevations from live data for our pre game data
+            '''
+            parsed_pre_game_data['awayTeam'] = parsed_live_game_data['awayTeam']
+            parsed_pre_game_data['homeTeam'] = parsed_live_game_data['homeTeam']
 
             ''' We need to add current_team_id to pre_game and live_game
                 data so that our color can be chosen based on what the user
