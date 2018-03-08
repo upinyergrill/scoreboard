@@ -46,7 +46,7 @@ def board(rest_api_queue):
     matrix = RGBMatrix(options = options)
     font = graphics.Font()
     font.LoadFont('Assets/tom-thumb.bdf')
-    team_color = json.load(open('Assets/nhlcolors.json'))
+    team_colors = json.load(open('Assets/nhlcolors.json'))
     color = graphics.Color(255, 255, 255)
 
     print('the board started')
