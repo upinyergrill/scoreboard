@@ -132,6 +132,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
         # we can assume game_end_time will be populated because the state is fian
         # what we want to do here is if the game has ended, this is how we tell it to get the next game
+        # TODO: If game_end_time is none then this will cause an exption
         elif game_state == "Final" and game_end_time > fifteen_mintes_from_now:
             pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
@@ -179,11 +180,12 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
                 seconds_to_sleep = 60
                 print('is preview')
             elif (game_state == "Live"):
-                rest_api_queue.put(parsed_live_game_data)
+                rest_api_queue.put(parsed_pre_game_data)
                 print('is live')
-            elif (game_state == "Final"):
-                rest_api_queue.put(parsed_live_game_data)
-                print('is final')
+            # would never hit this becuase game_state != "Final"
+            #elif (game_state == "Final"):
+            #    rest_api_queue.put(parsed_live_game_data)
+            #    print('is final')
             else:
                 print('not any of those')
             # We will modifly the Previe and FInal if statemtns based on this extra info
@@ -241,6 +243,7 @@ def update_team(team_id):
         so do this at startup of the program. maybe store it in a file.
         actaully you could use a shared memory array, i think 
     '''
+    # THe lock was causing hangs when switching to a live game
     with shared_memory_team_id.get_lock():
         shared_memory_team_id.value = team_id
     rtn = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
