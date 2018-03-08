@@ -36,3 +36,13 @@ def draw_outer_border(matrix, font, r, g, b):
         matrix.SetPixel(x, 0, r, g, b)
     for x in range(0, 64):
         matrix.SetPixel(x, 31, r, g, b)
+
+def draw_home_team_pre_game(matrix, font, color, game_data):
+    home_team = str(game_data['homeTeam'])
+    home_win = "W-" + str(game_data['homeWin']) + ""
+    home_lose = "L-" + str(game_data['homeLoss']) + ""
+    home_otl = "O-" + str(game_data['homeOtl']) + ""
+    graphics.DrawText(matrix, font, 48, 7, color, home_team)
+    graphics.DrawText(matrix, font, 46, 13, color, home_win)
+    graphics.DrawText(matrix, font, 46, 19, color, home_lose)
+    graphics.DrawText(matrix, font, 46, 25, color, home_otl)
