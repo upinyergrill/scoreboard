@@ -9,17 +9,17 @@ import array
 
 def simulate_get_game_data(x):
     if x >= 0 and x <= 2:
-         return pt.get_game_data_from_file('exampleDataGameLive.json')
+         return pt.get_game_data_from_file('../json/exampleDataGameLive.json')
     elif x >= 3 and x <= 5:
-        return pt.get_game_data_from_file('exampleDataGameStopped.json')
-    elif x >= 6 and x <= 8:
-        return pt.get_game_data_from_file('exampleDataGameLive3.json')
-    elif x >= 9 and x <= 11:
+        return pt.get_game_data_from_file('../json/exampleDataGameStopped.json')
+    elif x >= 6:
+        return pt.get_game_data_from_file('../json/exampleDataGameLive3.json')
+    ''' elif x >= 9 and x <= 11:
         return pt.get_game_data_from_file('../json/ot.json')
     elif x >= 12 and x <= 14:
         return pt.get_game_data_from_file('../json/ot2.json')
     else:
-        return pt.get_game_data_from_file('../json/otEnd.json')
+        return pt.get_game_data_from_file('../json/otEnd.json') '''
 
 def get_game_data():
     #url = "https://statsapi.web.nhl.com/api/v1/game/2017020862/feed/live"
@@ -67,35 +67,36 @@ def start_timer_logic(q, timer_q):
             game_data = q.get(False)
             parsed_game_data = pt.get_parsed_game_data(game_data)
             game_time_and_period = pt.get_game_time_and_period(parsed_game_data)
-            print('game time:', game_time_and_period['time'])
+            #print('game time:', game_time_and_period['time'])
             if is_period_live(game_time_and_period['time']):
                 live_game_time_seconds = pt.get_seconds_from_string(game_time_and_period['time'])
                 if game_time:
-                    print('game_time is set')
+                    #print('game_time is set')
                     game_time_seconds = pt.get_seconds_from_string(game_time)
                 else:
-                    print('game_time is not set')
+                    #print('game_time is not set')
                     game_time_seconds = 0
                 if game_time_seconds != live_game_time_seconds:
                     # time changed
-                    print('time changed')
+                    #print('time changed')
                     game_time = game_time_and_period['time']
-                    print ('should timer start:', pt.should_start_timer(parsed_game_data))
+                    #print ('should timer start:', pt.should_start_timer(parsed_game_data))
                     if pt.should_start_timer(parsed_game_data) is True:
                         # time has changed and should start timer
-                        print('time should start')
+                        #print('time should start')
                         timer_q.put(live_game_time_seconds)
                     else:
-                        print('timer should not start')
+                        #print('timer should not start')
                         # time has changed and should not start timer
                         timer_q.put(9999)
-                    print('after if')
+                    #print('after if')
                 else:
                     # time hasn't changed
-                    print('time has not changed')
+                    #print('time has not changed')
                     pass
             else:
-                print('not is_period_live(game_time_and_period[\'time\'])')
+                #print('not is_period_live(game_time_and_period[\'time\'])')
+                pass
         except:
             #print('waiting')
             pass

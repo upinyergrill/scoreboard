@@ -162,9 +162,9 @@ def should_start_timer(game_data):
     """determines if the timer should start
     return boolean
     """
-    print('should_start_timer begin')
+    #print('should_start_timer begin')
     if game_data['intermissionTimeRemaining'] >= 1:
-        print('should_start_timer in intermission')
+        #print('should_start_timer in intermission')
         return True
     if len(game_data['stoppage']) >= 1:
         # print('has stoppage')
@@ -173,15 +173,15 @@ def should_start_timer(game_data):
         latest_stoppage_time_remaining = latest_stoppage['about']['periodTimeRemaining']
 
         if game_data['currentPeriod'] == latest_stoppage_period:
-            print('last stopage was in this period')
+            #print('last stopage was in this period')
             time_remaining_seconds = get_seconds_from_string(
                 game_data['currentPeriodTimeRemaining']
             )
-            print('time_remaining_seconds', time_remaining_seconds)
+            #print('time_remaining_seconds', time_remaining_seconds)
             stoppage_time_remaining_seconds = get_seconds_from_string(
                 latest_stoppage_time_remaining
             )
-            print('stoppage_time_remaining_seconds', stoppage_time_remaining_seconds)
+            #print('stoppage_time_remaining_seconds', stoppage_time_remaining_seconds)
             if (time_remaining_seconds == stoppage_time_remaining_seconds or
                     time_remaining_seconds == (stoppage_time_remaining_seconds + 1) or
                     time_remaining_seconds == (stoppage_time_remaining_seconds - 1)):
