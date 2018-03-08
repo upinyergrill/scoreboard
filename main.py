@@ -47,7 +47,7 @@ def board(rest_api_queue):
     font = graphics.Font()
     font.LoadFont('Assets/tom-thumb.bdf')
     team_colors = json.load(open('Assets/nhlcolors.json'))
-    color = graphics.Color(255, 255, 255)
+    color_white = graphics.Color(255, 255, 255)
 
     print('the board started')
 
@@ -63,7 +63,9 @@ def board(rest_api_queue):
 
             if (game_data['gameState'] == "Preview"):
                 print('should render')
-                nhlboardrender.preview(matrix, font, color, game_data)
+                nhlboardrender.preview(matrix, font, color_white, game_data)
+                nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
+                nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
                 print('is it blocking code?')
                 #pass
             elif(game_data['gameState'] == "Live"):

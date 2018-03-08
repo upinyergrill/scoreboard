@@ -1,5 +1,11 @@
 from rgbmatrix import graphics
 
+def draw_away_team_pre_game(matrix, font, color, game_data):
+    graphics.DrawText(matrix, font, 5, 7, color, str(game_data['awayTeam']))
+    graphics.DrawText(matrix, font, 3, 13, color, "W-" + str(game_data['awayWin']))
+    graphics.DrawText(matrix, font, 3, 19, color, "L-" + str(game_data['awayLoss']))
+    graphics.DrawText(matrix, font, 3, 25, color, "O-" + str(game_data['awayOtl']))
+
 def preview(matrix, font, color, game_data):
     clear_area(matrix, 6, 6, 5, 5)
     graphics.DrawText(matrix, font, 6, 6, color, str(game_data['homeTeam']))
