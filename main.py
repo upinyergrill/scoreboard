@@ -6,11 +6,13 @@
 from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from multiprocessing import Value, Process, Queue, Array
 from flask import Flask
+from flask import Response
 import json
 import time
 import nhl_game_data as nhlgamedata
 import nhl_board_render as nhlboardrender
 from datetime import datetime
+import nhl_teams as nhlteams
 
 # The Board
 def board(rest_api_queue):
@@ -175,14 +177,18 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
                 else:
                     time.sleep(0.25)
 
+# Get the user settings 
+settings = get_settings()
+
+# Get list of teams
+active_nhl_teams = nhlteams.get()
+
+# We want to do application setup before this
 # this makes the flask app run
 app = Flask(__name__)
 
 # Queue for the REST API to send infomration to the Board process
 rest_api_queue = Queue()
-
-# Get the user settings 
-settings = get_settings()
 
 # At runtime set the team id to what was stored in settings
 shared_memory_team_id = Value('i', settings['team_id'])
@@ -199,24 +205,27 @@ board_process.start()
 
 @app.route('/team/<int:team_id>', methods=['GET'])
 def update_team(team_id):
-    # sucks that i'm violating scope 
-    # but I can't figure out how to make it a param
-    ''' Todo
-        use https://statsapi.web.nhl.com/api/v1/teams
-        to pull down all the valid team ids
-        so do this at startup of the program. maybe store it in a file.
-        actaully you could use a shared memory array, i think 
-    '''
-    # THe lock was causing hangs when switching to a live game
-    with shared_memory_team_id.get_lock():
-        shared_memory_team_id.value = team_id
-    rtn = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
-    return rtn
+    # Make sure the team they specified is valid
+    if (any(team['id'] == team_id for team in active_nhl_teams)):
+        # sucks that i'm violating scope 
+        # but I can't figure out how to make it a param
+        # Bug Resolved - THe lock was causing hangs when switching to a live game
+        with shared_memory_team_id.get_lock():
+            shared_memory_team_id.value = team_id
+        json = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
+        return Response(json, status=200, mimetype='application/json')
+    else:
+        return Response("{'error':'not a valid team id'}", status=422, mimetype='application/json')
 
 @app.route('/team', methods=['GET'])
 def show_team():
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
-    return str(shared_memory_team_id.value)
+    json = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
+    return Response(json, status=200, mimetype='application/json')
+
+@app.route('/team/all', methods=['GET'])
+def return_all_teams():
+    return ""
 
 app.run(host='0.0.0.0')
