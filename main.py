@@ -15,7 +15,7 @@ from datetime import datetime
 import nhl_teams as nhlteams
 
 # The Board
-def board(rest_api_queue):
+def board(rest_api_queue, shared_board_state):
     ''' The main function of the Board process should be waiting
         for the REST API process to send it data
         
@@ -47,43 +47,50 @@ def board(rest_api_queue):
     # this way we can clear the board to get ready for a new view
     current_game_state = None
 
+    # Initalize teh board state
+    current_board_state = shared_board_state.value
+
     while True:
         try:
             game_data = rest_api_queue.get(False)
             print('board got game data')
             print(game_data)
 
-            # Check if the game state has changed
-            # life cylce
-            # preview -> live   | Clear
-            # live -> final     | Don't clear
-            # final -> preview  | Clear
-            if (current_game_state is not None):
-                if (current_game_state == "Preview" and
-                    game_data['gameState'] == "Live"):
-                    matrix.clear()
-                elif (current_game_state == "Live" and
-                    game_data['gameState'] == "Final"):
+            # Clear the board, but only clear if the state has changed from 1 to 0
+            if (current_board_state == 1 and shared_board_state.value == 0):
+                matrix.clear()
+            else:
+                # Check if the game state has changed
+                # life cylce
+                # preview -> live   | Clear
+                # live -> final     | Don't clear
+                # final -> preview  | Clear
+                if (current_game_state is not None):
+                    if (current_game_state == "Preview" and game_data['gameState'] == "Live"):
+                        matrix.clear()
+                    elif (current_game_state == "Live" and game_data['gameState'] == "Final"):
+                        pass
+                    if (current_game_state == "Final" and game_data['gameState'] == "Preview"):
+                        matrix.clear()
+
+                current_game_state = game_data['gameState']
+
+                #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
+                nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
+                nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
+                
+                if (current_game_state == "Preview"):
+                    print('should render')
+                    nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
+                    nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
+                    print('is it blocking code?')
+                    #pass
+                elif(current_game_state == "Live" or current_game_state == "Final"):
                     pass
-                if (current_game_state == "Final" and
-                    game_data['gameState'] == "Preview"):
-                    matrix.clear()
-
-            current_game_state = game_data['gameState']
-
-            #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-            nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-            nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-            
-            if (current_game_state == "Preview"):
-                print('should render')
-                nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
-                nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
-                print('is it blocking code?')
-                #pass
-            elif(current_game_state == "Live" or current_game_state == "Final"):
                 pass
-            pass
+            
+            # Update current board state for next iteration of loop
+            current_board_state = shared_board_state.value
         except:
             pass
     pass
@@ -216,11 +223,14 @@ rest_api_queue = Queue()
 # At runtime set the team id to what was stored in settings
 shared_memory_team_id = Value('i', settings['team_id'])
 
+# At runtime set the board to be on
+shared_memory_board_state = Value('i', 1)
+
 # Create the process for getting data in a loop
 nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,))
 
 # Create the process for running the board
-board_process = Process(target=board, args=(rest_api_queue,))
+board_process = Process(target=board, args=(rest_api_queue,shared_memory_board_state,))
 
 # Start processes
 nhl_data_process.start()
@@ -251,5 +261,17 @@ def show_team():
 def return_all_teams():
     res = json.dumps(active_nhl_teams)
     return Response(res, status=200, mimetype='application/json')
+
+@app.route('/board/state/<int:board_state>', methods=['GET'])
+def change_board_state(board_state):
+    board_off = 0
+    board_on = 1
+    if (board_state == board_off or board_state == board_on):
+        with shared_memory_board_state.get_lock():
+            shared_memory_board_state.value = board_state
+        res = json.dumps({'state': board_state},  separators=(',',':'))
+        return Response(res, status=200, mimetype='application/json')
+    else:
+        return Response("{'error':'not a valid state'}", status=422, mimetype='application/json')
 
 app.run(host='0.0.0.0')
