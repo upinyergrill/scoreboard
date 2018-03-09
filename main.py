@@ -295,7 +295,7 @@ def change_default_team(team_id):
         res = json.dumps({'team_id': team_id},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
     else:
-        return Response("{'error':'not a valid team id'}", status=422, mimetype='application/json')
+        return Response("{'error':'not a valid team id.  See /team/all for list.'}", status=422, mimetype='application/json')
 
 @app.route('/team/default', methods=['GET'])
 def get_default_team():
@@ -318,7 +318,7 @@ def change_board_state(board_state):
         res = json.dumps({'state': board_state},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
     else:
-        return Response("{'error':'not a valid state'}", status=422, mimetype='application/json')
+        return Response("{'error':'not a valid state. Choose 0-1. 0 is off.'}", status=422, mimetype='application/json')
 
 @app.route('/board/state', methods=['GET'])
 def get_board_state():
@@ -334,7 +334,7 @@ def change_board_timer(sleep_timer):
         res = json.dumps({'timer': sleep_timer},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
     else:
-        return Response("{'error':'not a valid state'}", status=422, mimetype='application/json')
+        return Response("{'error':'not a valid time. Choose 0-1440.  0 is never.'}", status=422, mimetype='application/json')
 
 @app.route('/board/timer', methods=['GET'])
 def get_board_timer():
@@ -351,7 +351,7 @@ def change_board_brightness(board_brightness):
         res = json.dumps({'brightness': board_brightness},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
     else:
-        return Response("{'error':'not a valid state'}", status=422, mimetype='application/json')
+        return Response("{'error':'not a valid brightness. Choose 1-4'}", status=422, mimetype='application/json')
 
 @app.route('/board/brightness', methods=['GET'])
 def get_board_brightness():
