@@ -74,7 +74,9 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
     current_team_id = shared_mem_team.value
     # game state get set later by fetch and parse
     game_state = None
-    game_end_time = None
+    # Use zero instead of None so we don't have an exception when
+    # we compare it to fifteen_mintes_from_now
+    game_end_time = 0
     # Never break from outer loop
     while True:
         '''if the game_state is not set then do this
@@ -95,7 +97,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
         # we can assume game_end_time will be populated because the state is fian
         # what we want to do here is if the game has ended, this is how we tell it to get the next game
-        # TODO: If game_end_time is none then this will cause an exption
+        # Bug Fixed: If game_end_time is none then this will cause an exption
         elif game_state == "Final" and game_end_time > fifteen_mintes_from_now:
             pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
