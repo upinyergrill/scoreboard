@@ -226,6 +226,7 @@ def show_team():
 
 @app.route('/team/all', methods=['GET'])
 def return_all_teams():
-    return ""
+    res = json.dumps(active_nhl_teams)
+    return Response(res, status=200, mimetype='application/json')
 
 app.run(host='0.0.0.0')
