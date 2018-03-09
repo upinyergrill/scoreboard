@@ -68,11 +68,6 @@ def board(rest_api_queue):
             pass
     pass
 
-def get_settings():
-    """imports json data
-    """
-    return json.load(open('settings.json'))
-
 def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
     # At runtime set the shared_mem_team value (the settings team id)
     # to the current team id 
@@ -178,7 +173,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
                     time.sleep(0.25)
 
 # Get the user settings 
-settings = get_settings()
+settings = json.load(open('settings.json'))
 
 # Get list of teams
 active_nhl_teams = nhlteams.get()
