@@ -212,8 +212,8 @@ def update_team(team_id):
         # Bug Resolved - THe lock was causing hangs when switching to a live game
         with shared_memory_team_id.get_lock():
             shared_memory_team_id.value = team_id
-        json = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
-        return Response(json, status=200, mimetype='application/json')
+        res = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
+        return Response(res, status=200, mimetype='application/json')
     else:
         return Response("{'error':'not a valid team id'}", status=422, mimetype='application/json')
 
@@ -221,8 +221,8 @@ def update_team(team_id):
 def show_team():
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
-    json = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
-    return Response(json, status=200, mimetype='application/json')
+    res = json.dumps({'team': shared_memory_team_id.value},  separators=(',',':'))
+    return Response(res, status=200, mimetype='application/json')
 
 @app.route('/team/all', methods=['GET'])
 def return_all_teams():
