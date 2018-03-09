@@ -43,25 +43,45 @@ def board(rest_api_queue):
 
     print('the board started')
 
+    # Keep track of game state
+    # this way we can clear the board to get ready for a new view
+    current_game_state = None
+
     while True:
         try:
             game_data = rest_api_queue.get(False)
             print('board got game data')
             print(game_data)
-            
+
+            # Check if the game state has changed
+            # life cylce
+            # preview -> live   | Clear
+            # live -> final     | Don't clear
+            # final -> preview  | Clear
+            if (current_game_state is not None):
+                if (current_game_state == "Preview" and
+                    game_data['gameState'] == "Live"):
+                    matrix.clear()
+                elif (current_game_state == "Live" and
+                    game_data['gameState'] == "Final"):
+                    pass
+                if (current_game_state == "Final" and
+                    game_data['gameState'] == "Preview"):
+                    matrix.clear()
+
+            current_game_state = game_data['gameState']
+
             #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
             
-            if (game_data['gameState'] == "Preview"):
+            if (current_game_state == "Preview"):
                 print('should render')
                 nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
                 nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
                 print('is it blocking code?')
                 #pass
-            elif(game_data['gameState'] == "Live"):
-                pass
-            elif(game_data['gameState'] == "Final"):
+            elif(current_game_state == "Live" or current_game_state == "Final"):
                 pass
             pass
         except:
@@ -121,7 +141,8 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
         # The final gameState data will only be donwloaded once
         # Also make sure there is a next gameId
         # If game is Live or Preview
-        if (game_state != "Final" or parsed_pre_game_data['gameId'] is not None):
+        #if (game_state != "Final" or parsed_pre_game_data['gameId'] is not None):
+        if (parsed_pre_game_data['gameId'] is not None):
             # Download live data
             live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data['gameId'])
             parsed_live_game_data = nhlgamedata.get_parsed_live_game_data(live_game_data)
@@ -153,9 +174,9 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
                 rest_api_queue.put(parsed_live_game_data)
                 print('is live')
             # would never hit this becuase game_state != "Final"
-            #elif (game_state == "Final"):
-            #    rest_api_queue.put(parsed_live_game_data)
-            #    print('is final')
+            elif (game_state == "Final"):
+                rest_api_queue.put(parsed_live_game_data)
+                print('is final')
             else:
                 print('not any of those')
             # We will modifly the Previe and FInal if statemtns based on this extra info
