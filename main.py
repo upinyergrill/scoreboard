@@ -12,16 +12,6 @@ from datetime import datetime
     python3 -m flash run
 '''
 
-# The REST API
-def rest_api(rest_api_queue):
-    ''' This will use Flask REST API
-        At a bare minimum it will have a route called
-        /team/:id where you can post to the int value
-        for the team that you would like to display
-        When a valid team id is matched, then it will send
-        a message via the rest_api_queue to the Board process '''
-    pass
-
 # The Board
 def board(rest_api_queue):
     ''' The main function of the Board process should be waiting
@@ -74,30 +64,6 @@ def board(rest_api_queue):
             pass
         except:
             pass
-    pass
-
-# Download NHL Data
-def fetch_nhl_data():
-    ''' download data from the "next" URI and
-        download data fro mthe "live" URI. '''
-    pass
-
-def determine_game_state():
-    ''' This function determines the state of the game.
-        The possible states are, pre, live, and post. '''
-    # Download "next" URI
-    # Find the next/current game from the "next" data
-    # Download "live" URI
-    # if game is live
-        #  display live game data
-    # else
-        # if (the game has ended within the last 15 minutes)
-            # display post game
-        # if else (the next game starts in 15 minutes or less)
-            # display pre game
-        # else (if the game has ended more than 15 minutes ago, 
-        # and the next game doesn't start in 15 minutes or less)
-            # turn off the board display 
     pass
 
 def get_settings():
@@ -227,10 +193,12 @@ shared_memory_team_id = Value('i', settings['team_id'])
 
 # Create the process for getting data in a loop
 nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,))
-nhl_data_process.start()
 
 # Create the process for running the board
 board_process = Process(target=board, args=(rest_api_queue,))
+
+# Start processes
+nhl_data_process.start()
 board_process.start()
 
 @app.route('/team/<int:team_id>', methods=['GET'])
