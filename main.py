@@ -79,6 +79,10 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
     game_end_time = 0
     # Never break from outer loop
     while True:
+        # Basically the point of all this code here is 
+        # so we dont keep downloading the pre game data is the game is live
+        # I know its a bunch of if statements that then do the same line of code
+        # but it works and I can't think of how to reverse the logic 
         '''if the game_state is not set then do this
             but if the game_state is set and 
             current_team_id does not equal shared_mem_team.value then do this
@@ -98,16 +102,15 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
         # we can assume game_end_time will be populated because the state is fian
         # what we want to do here is if the game has ended, this is how we tell it to get the next game
         # Bug Fixed: If game_end_time is none then this will cause an exption
+        # What happens here is if the game has been over for more than 15 minutes,
+        # get the next game data, which will be in state "Preview" so if the game was 
+        # showing live data this will make it show preview data for the next game
         elif game_state == "Final" and game_end_time > fifteen_mintes_from_now:
             pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
         
         # Store what the current team is for later comparison
         current_team_id = shared_mem_team.value
-
-        ''' In production code we would be getting data from URL
-            and would be sending the data via Queues         
-        '''
 
         # if there is not a game coming anytime soon,
         # we want to slee for a longer time
@@ -117,7 +120,9 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
 
         # The final gameState data will only be donwloaded once
         # Also make sure there is a next gameId
+        # If game is Live or Preview
         if (game_state != "Final" or parsed_pre_game_data['gameId'] is not None):
+            # Download live data
             live_game_data = nhlgamedata.fetch_live_game_data(parsed_pre_game_data['gameId'])
             parsed_live_game_data = nhlgamedata.get_parsed_live_game_data(live_game_data)
 
