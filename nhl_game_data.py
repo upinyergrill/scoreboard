@@ -163,7 +163,7 @@ def get_parsed_live_game_data(game_data):
     )
 
     if 'endDateTime' in game_data['gameData']['datetime']:
-        game['endTime'] = (
+        game['gameEndDateTime'] = (
             dateutil.parser.parse(game_data['gameData']['datetime']['endDateTime'])
         )
 
@@ -221,9 +221,10 @@ def get_parsed_pre_game_data(game_data):
         game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['teams']['home']['leagueRecord']['ot']
     )
 
-    game['gameDateTime'] = (
-        game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gameDate']
-    )
+    if 'gameDate' in game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]:
+        game['gameStartDateTime'] = (
+            dateutil.parser.parse(game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gameDate'])
+        )
 
     return game
 

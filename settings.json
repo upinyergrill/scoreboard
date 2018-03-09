@@ -1,5 +1,6 @@
 {
     "team_id": 16,
     "timezone": "US/Eastern",
-    "brightness": 1
+    "brightness": 1,
+    "sleep_timer": 15
 }
