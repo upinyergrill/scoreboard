@@ -8,18 +8,25 @@ import json
 import array
 
 def simulate_get_game_data(x):
-    if x >= 0 and x <= 2:
+    ''' if x >= 0 and x <= 2:
          return pt.get_game_data_from_file('../json/exampleDataGameLive.json')
     elif x >= 3 and x <= 5:
         return pt.get_game_data_from_file('../json/exampleDataGameStopped.json')
-    elif x >= 6:
+    elif x >= 6 and x <= 8:
         return pt.get_game_data_from_file('../json/exampleDataGameLive3.json')
-    ''' elif x >= 9 and x <= 11:
+    elif x >= 9 and x <= 11:
         return pt.get_game_data_from_file('../json/ot.json')
     elif x >= 12 and x <= 14:
         return pt.get_game_data_from_file('../json/ot2.json')
     else:
         return pt.get_game_data_from_file('../json/otEnd.json') '''
+    if x >= 0 and x <= 2:
+        return pt.get_game_data_from_file('../json/ot.json')
+    elif x >= 3 and x <= 5:
+        return pt.get_game_data_from_file('../json/ot2.json')
+    else:
+        return pt.get_game_data_from_file('../json/otEnd.json') 
+    
 
 def get_game_data():
     #url = "https://statsapi.web.nhl.com/api/v1/game/2017020862/feed/live"
@@ -81,14 +88,19 @@ def start_timer_logic(q, timer_q):
                     #print('time changed')
                     game_time = game_time_and_period['time']
                     #print ('should timer start:', pt.should_start_timer(parsed_game_data))
+                    seconds_and_state = {
+                        'seconds': live_game_time_seconds
+                    }
                     if pt.should_start_timer(parsed_game_data) is True:
                         # time has changed and should start timer
                         #print('time should start')
-                        timer_q.put(live_game_time_seconds)
+                        seconds_and_state['state'] = 'live'
+                        timer_q.put(seconds_and_state)
                     else:
                         #print('timer should not start')
                         # time has changed and should not start timer
-                        timer_q.put(9999)
+                        seconds_and_state['state'] = 'stopped'
+                        timer_q.put(seconds_and_state)
                     #print('after if')
                 else:
                     # time hasn't changed
@@ -102,28 +114,43 @@ def start_timer_logic(q, timer_q):
             pass
         time.sleep(1)
 
+def time_printer(seconds):
+    timeformat = pt.seconds_to_string(seconds)
+    print('Time: ', timeformat)
+
 def countdown(timer_q):
-    seconds = timer_q.get()
+    # Blocking code, wait for start_timer_logic to send time
+    seconds_and_state = timer_q.get()
+    print('countdown got data for first time')
     while True:
         try:
-            seconds = timer_q.get(False)
+            # non-blocking
+            seconds_and_state = timer_q.get(False)
         except:
             pass
-        if seconds != 9999:
-            while seconds:
-                timeformat = pt.seconds_to_string(seconds)
-                print('Time: ', timeformat)
+        if seconds_and_state['state'] == 'live':
+            while seconds_and_state['seconds']:
+                # print the time as it counts down 
+                time_printer(seconds_and_state['seconds'])
                 try:
                     # dosn't matter if its 9999 or new seconds
                     # it's an update to break to outer loop
-                    seconds = timer_q.get(False)
-                    print('received seconds: ', seconds)
+                    # non-block, just check if we got a new time
+                    # if we didn't just keep counting down
+                    seconds_and_state = timer_q.get(False)
+                    # Even tho the time is stopped, we should print the time
+                    # this is because its possible to get the game data
+                    # it is stopped, then we the game data again and it 
+                    # is still stopped, but the time has changed between
+                    # the frist and second iteration of the get live data
+                    #print('received seconds: ', seconds_and_state['seconds'])
+                    time_printer(seconds_and_state['seconds'])
                     break
                 except:
-                    seconds -= 1
+                    seconds_and_state['seconds'] -= 1
                     time.sleep(1)
-        if seconds == 0:
-            print('00:00')
+        if seconds_and_state['seconds'] == 0:
+            time_printer(0)
             time.sleep(1)
             #break
 
@@ -132,16 +159,16 @@ if __name__ == '__main__':
 
     timer_q = Queue()
 
-    p1 = Process(target=live_data, args=(q,))
-    p2 = Process(target=start_timer_logic, args=(q,timer_q,))
-    p1.start()
-    p2.start()
-
+    proc_live_data = Process(target=live_data, args=(q,))
+    proc_start_timer_logic = Process(target=start_timer_logic, args=(q,timer_q,))
+    proc_countdown = Process(target=countdown, args=(timer_q,))
     
-    p = Process(target=countdown, args=(timer_q,))
-    p.start()
+    # start is non-blocking
+    proc_live_data.start()
+    proc_start_timer_logic.start()
+    proc_countdown.start()
 
-    print('countdown finished')
-    p1.join()
+    # join is blocking
+    proc_live_data.join()
     print('you will not see this')
     
