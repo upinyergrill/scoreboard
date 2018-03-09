@@ -233,7 +233,7 @@ nhl_data_process.start()
 board_process = Process(target=board, args=(rest_api_queue,))
 board_process.start()
 
-@app.route('/team/<int:team_id>', methods=['POST'])
+@app.route('/team/<int:team_id>', methods=['GET'])
 def update_team(team_id):
     # sucks that i'm violating scope 
     # but I can't figure out how to make it a param
