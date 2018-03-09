@@ -58,7 +58,7 @@ def board(rest_api_queue, shared_board_state):
 
             # Clear the board, but only clear if the state has changed from 1 to 0
             if (current_board_state == 1 and shared_board_state.value == 0):
-                matrix.clear()
+                matrix.Clear()
             else:
                 # Check if the game state has changed
                 # life cylce
@@ -67,11 +67,11 @@ def board(rest_api_queue, shared_board_state):
                 # final -> preview  | Clear
                 if (current_game_state is not None):
                     if (current_game_state == "Preview" and game_data['gameState'] == "Live"):
-                        matrix.clear()
+                        matrix.Clear()
                     elif (current_game_state == "Live" and game_data['gameState'] == "Final"):
                         pass
                     if (current_game_state == "Final" and game_data['gameState'] == "Preview"):
-                        matrix.clear()
+                        matrix.Clear()
 
                 current_game_state = game_data['gameState']
 
