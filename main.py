@@ -1,3 +1,8 @@
+''' Execution Instructions
+    su
+    export FLASK_APP=flask_example.py
+    python3 -m flash run
+'''
 from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from multiprocessing import Value, Process, Queue, Array
 from flask import Flask
@@ -6,11 +11,6 @@ import time
 import nhl_game_data as nhlgamedata
 import nhl_board_render as nhlboardrender
 from datetime import datetime
-
-''' su
-    export FLASK_APP=flask_example.py
-    python3 -m flash run
-'''
 
 # The Board
 def board(rest_api_queue):
@@ -175,7 +175,6 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue):
                 else:
                     time.sleep(0.25)
 
-
 # this makes the flask app run
 app = Flask(__name__)
 
@@ -187,9 +186,6 @@ settings = get_settings()
 
 # At runtime set the team id to what was stored in settings
 shared_memory_team_id = Value('i', settings['team_id'])
-
-# Shared memory for example data to show things are updating 
-#shared_memory_data = Array('c', str.encode('{"t": 0, "m": 0}'))
 
 # Create the process for getting data in a loop
 nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,))
