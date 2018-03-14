@@ -128,7 +128,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
     # Update current board state for next iteration of loop
     current_board_state = shared_board_state.value
     # do this for the birghtness too
-    current_brightness = shared_memory_board_brightness.value
+    current_brightness = shared_board_brightness.value
     # game state get set later by fetch and parse
     game_state = None
     game_end_time = None
@@ -153,7 +153,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
         # do the same for the board state
         current_board_state = shared_board_state.value
         # do the same for the brightness
-        current_brightness = shared_memory_board_brightness.value
+        current_brightness = shared_board_brightness.value
 
         # What happens here is if the game has been over for more than 15 minutes,
         # get the next game data, which will be in state "Preview" so if the game was 
