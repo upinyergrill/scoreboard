@@ -73,7 +73,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 game_data = rest_api_queue.get(False)
                 print('board got game data')
                 print(game_data)
-
+                print('current_board_state', current_board_state)
+                print('shared_board_state', shared_board_state.value)
                 # Clear the board, but only clear if the state has changed from 1 to 0
                 if (current_board_state == 1 and shared_board_state.value == 0):
                     matrix.Clear()
@@ -144,6 +145,8 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
 
         # Store what the current team is for comparison
         current_team_id = shared_mem_team.value
+        # do the same for the board state
+        current_board_state = shared_board_state.value
 
         # What happens here is if the game has been over for more than 15 minutes,
         # get the next game data, which will be in state "Preview" so if the game was 
