@@ -37,6 +37,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
     color_white = graphics.Color(255, 255, 255)
 
     while True:
+        # init board state
+        current_board_state = shared_board_state.value
         # Init brightness from shared mem
         current_brightness = shared_board_brightness.value
 
@@ -57,20 +59,21 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
         # this way we can clear the board to get ready for a new view
         current_game_state = None
 
-        # Initalize teh board state
-        current_board_state = shared_board_state.value
-
         while True:
-            # If brightness changes, re-render the board
-            if (current_brightness != shared_board_brightness.value):
-                # TODO: I'm not sure if this will make the matrix __dealloc__
-                # or not but i saw in the source the class's __dealloc__ method
-                # has the Clear function in it, so it shoudl be easy to test
-                matrix = None
-                break
-
             try:
                 game_data = rest_api_queue.get(False)
+                
+                # If brightness changes, re-render the board
+                if (current_brightness != shared_board_brightness.value):
+                    # TODO: I'm not sure if this will make the matrix __dealloc__
+                    # or not but i saw in the source the class's __dealloc__ method
+                    # has the Clear function in it, so it shoudl be easy to test
+                    matrix = None
+                    break
+                
+                
+                current_brightness = shared_board_brightness.value
+
                 print('board got game data')
                 print(game_data)
                 print('current_board_state', current_board_state)
@@ -113,17 +116,19 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 
                 # Update current board state for next iteration of loop
                 # dont need this, setting in set_team_and_fetch_nhl_data
-                #current_board_state = shared_board_state.value
+                current_board_state = shared_board_state.value
             except:
                 pass
 
-def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_state, shared_sleep_timer):
+def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_state, shared_board_brightness, shared_sleep_timer):
     # At runtime set the shared_mem_team value (the settings team id)
     # to the current team id 
     current_team_id = shared_mem_team.value
     # do the same for the board state
     # Update current board state for next iteration of loop
     current_board_state = shared_board_state.value
+    # do this for the birghtness too
+    current_brightness = shared_memory_board_brightness.value
     # game state get set later by fetch and parse
     game_state = None
     game_end_time = None
@@ -147,6 +152,8 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
         current_team_id = shared_mem_team.value
         # do the same for the board state
         current_board_state = shared_board_state.value
+        # do the same for the brightness
+        current_brightness = shared_memory_board_brightness.value
 
         # What happens here is if the game has been over for more than 15 minutes,
         # get the next game data, which will be in state "Preview" so if the game was 
@@ -236,6 +243,8 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
                 break
             elif current_board_state != shared_board_state.value:
                 break
+            elif current_brightness != shared_board_brightness.value:
+                break
             else:
                 # if it's been 10 seconds break
                 if time.time() > timeout:
@@ -269,7 +278,7 @@ shared_memory_sleep_timer = Value('i', settings['sleep_timer'])
 shared_memory_board_brightness = Value('i', settings['brightness'])
 
 # Create the process for getting data in a loop
-nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,shared_memory_board_state,shared_memory_sleep_timer,))
+nhl_data_process = Process(target=set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,shared_memory_board_state,shared_memory_board_brightness,shared_memory_sleep_timer,))
 
 # Create the process for running the board
 board_process = Process(target=board, args=(rest_api_queue,shared_memory_board_state,shared_memory_board_brightness,))
