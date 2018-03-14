@@ -77,6 +77,9 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 # Clear the board, but only clear if the state has changed from 1 to 0
                 if (current_board_state == 1 and shared_board_state.value == 0):
                     matrix.Clear()
+                elif (current_board_state == 0 and shared_board_state.value ==0):
+                    # The board is off, leave it offs
+                    pass
                 else:
                     # Check if the game state has changed
                     # life cylce
@@ -108,7 +111,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                     pass
                 
                 # Update current board state for next iteration of loop
-                current_board_state = shared_board_state.value
+                # dont need this, setting in set_team_and_fetch_nhl_data
+                #current_board_state = shared_board_state.value
             except:
                 pass
 
@@ -116,6 +120,9 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
     # At runtime set the shared_mem_team value (the settings team id)
     # to the current team id 
     current_team_id = shared_mem_team.value
+    # do the same for the board state
+    # Update current board state for next iteration of loop
+    current_board_state = shared_board_state.value
     # game state get set later by fetch and parse
     game_state = None
     game_end_time = None
@@ -223,6 +230,8 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
             # While we are sleeping check ever 0.25 seconds 
             # if the API updated the team id
             if current_team_id != shared_mem_team.value:
+                break
+            elif current_board_state != shared_board_state.value:
                 break
             else:
                 # if it's been 10 seconds break
