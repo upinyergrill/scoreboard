@@ -376,8 +376,8 @@ def change_board_brightness(board_brightness):
 
 @app.route('/board/brightness', methods=['GET'])
 def get_board_brightness():
-    settings = json.load(open('settings.json'))
-    res = json.dumps({'brightness': settings['brightness']},  separators=(',',':'))
+    
+    res = json.dumps({'brightness': shared_memory_board_brightness.value},  separators=(',',':'))
     return Response(res, status=200, mimetype='application/json')
 
 app.run(host='0.0.0.0')
