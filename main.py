@@ -147,6 +147,9 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
     pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
     parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
     
+    # Get the tiem in seconds when the board turned
+    boot_time = time.time()
+
     # Never break from outer loop
     while True:
         # Basically the point of all this code here is 
@@ -157,6 +160,33 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
             # get pre game data
             pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
             parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
+
+        ''' If the game has been over for 15 minutes from now
+            and the next game doesn't for more than 15 minutes from now
+            shared_sleep_timer == 0 means don't turn off ever
+        '''
+        if shared_sleep_timer.value != 0:
+            # did it just turn on, boot_time
+            # did the team change
+            
+            if time.time() > boot_time + shared_sleep_timer.value * 60 or
+                current_team_id != shared_mem_team.value:
+                # did the board state change from 0 to 1
+                if current_board_state == 0 and shared_board_state.value == 1:
+                    # game is not over
+                    if game_end_time is not None:
+                        # its been the sleep timer value since the game ended
+                        if get_time_since_game_ended(game_end_time) > shared_sleep_timer.value * 60:
+                            with shared_board_state.get_lock():
+                                shared_board_state.value = 0
+
+            game_start_time = time.mktime(parsed_pre_game_data['gameStartDateTime'].timetuple())
+            time_until_next_game_starts = game_start_time - time.time()
+            # the game won't start for more than the sleep timers value
+            if time_until_next_game_starts > shared_sleep_timer.value * 60:
+                with shared_board_state.get_lock():
+                    shared_board_state.value = 0
+
 
         # Store what the current team is for comparison
         current_team_id = shared_mem_team.value
@@ -174,21 +204,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
                 pre_game_data = nhlgamedata.fetch_pre_game_data(shared_mem_team.value)
                 parsed_pre_game_data = nhlgamedata.get_parsed_pre_game_data(pre_game_data)
 
-        ''' If the game has been over for 15 minutes from now
-            and the next game doesn't for more than 15 minutes from now
-            shared_sleep_timer == 0 means don't turn off ever
-        ''' 
-        if shared_sleep_timer.value != 0:
-            if game_end_time is not None:
-                if get_time_since_game_ended(game_end_time) > shared_sleep_timer.value * 60:
-                    with shared_board_state.get_lock():
-                        shared_board_state.value = 0
-
-            game_start_time = time.mktime(parsed_pre_game_data['gameStartDateTime'].timetuple())
-            time_until_next_game_starts = game_start_time - time.time()
-            if time_until_next_game_starts > shared_sleep_timer.value * 60:
-                with shared_board_state.get_lock():
-                    shared_board_state.value = 0
+        
 
         # if there is not a game coming anytime soon,
         # we want to slee for a longer time
