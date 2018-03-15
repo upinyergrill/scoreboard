@@ -128,10 +128,10 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 # dont need this, setting in set_team_and_fetch_nhl_data
                 current_board_state = shared_board_state.value
                 game_data = rest_api_queue.get()
-                time.sleep(5)
+                #time.sleep(5)
             except Exception as e:
                 print('e', e)
-                time.sleep(10)
+                #time.sleep(10)
                 pass
 
 def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_state, shared_board_brightness, shared_sleep_timer):
