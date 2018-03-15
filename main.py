@@ -18,7 +18,7 @@ def render_board(current_board_state, shared_board_state, current_game_state, ga
     #in: current_board_state, shared_board_state, current_game_state, game_data, matrix
     #out: current_game_state
     output_object = {}
-    if game_data != None
+    if game_data != None:
         return output_object
 
     if (current_board_state == 1 and shared_board_state.value == 0):
