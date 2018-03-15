@@ -23,6 +23,7 @@ def render_board(current_board_state, shared_board_state, current_game_state, ga
         print('game_data is None')
         return output_object
 
+    print('ummm')
     if (current_board_state == 1 and shared_board_state.value == 0):
         print('clear matrix')
         matrix.Clear()
