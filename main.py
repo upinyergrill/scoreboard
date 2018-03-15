@@ -14,6 +14,50 @@ import nhl_board_render as nhlboardrender
 from datetime import datetime
 import nhl_teams as nhlteams
 
+def render_board(current_board_state, shared_board_state, current_game_state, game_data, matrix, font, team_colors, color_white):
+    #in: current_board_state, shared_board_state, current_game_state, game_data, matrix
+    #out: current_game_state
+    output_object = {}
+    if game_data != None
+        return output_object
+
+    if (current_board_state == 1 and shared_board_state.value == 0):
+        matrix.Clear()
+    elif (current_board_state == 0 and shared_board_state.value ==0):
+        # The board is off, leave it offs
+        pass
+    else:
+        # Check if the game state has changed
+        # life cylce
+        # preview -> live   | Clear
+        # live -> final     | Don't clear
+        # final -> preview  | Clear
+        if (current_game_state is not None):
+            if (current_game_state == "Preview" and game_data['gameState'] == "Live"):
+                matrix.Clear()
+            elif (current_game_state == "Live" and game_data['gameState'] == "Final"):
+                pass
+            if (current_game_state == "Final" and game_data['gameState'] == "Preview"):
+                matrix.Clear()
+
+        #current_game_state = game_data['gameState']
+        output_object['gameState'] = game_data['gameState']
+
+        #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
+        nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
+        nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
+        
+        if (current_game_state == "Preview"):
+            print('should render')
+            nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
+            nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
+            print('is it blocking code?')
+            #pass
+        elif(current_game_state == "Live" or current_game_state == "Final"):
+            pass
+        pass
+    return output_object
+
 def get_time_since_game_ended(seconds):
     return time.time() - seconds
 
@@ -59,10 +103,17 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
         # this way we can clear the board to get ready for a new view
         current_game_state = None
 
+        # init 
+        current_game_data = None
+
         while True:
             try:
+                render_board(current_board_state, shared_board_state, current_game_state, current_game_data, matrix, font, team_colors, color_white)
                 game_data = rest_api_queue.get(False)
-                
+                # We will hold on to this game_data incase we break from this looop
+                # to reallocate the matrix with a new brightness, and we can rerender
+                # the data before we start waiting for new data
+                current_game_data = game_data
                 # If brightness changes, re-render the board
                 if (current_brightness != shared_board_brightness.value):
                     # TODO: I'm not sure if this will make the matrix __dealloc__
@@ -79,41 +130,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 print('current_board_state', current_board_state)
                 print('shared_board_state', shared_board_state.value)
                 # Clear the board, but only clear if the state has changed from 1 to 0
-                if (current_board_state == 1 and shared_board_state.value == 0):
-                    matrix.Clear()
-                elif (current_board_state == 0 and shared_board_state.value ==0):
-                    # The board is off, leave it offs
-                    pass
-                else:
-                    # Check if the game state has changed
-                    # life cylce
-                    # preview -> live   | Clear
-                    # live -> final     | Don't clear
-                    # final -> preview  | Clear
-                    if (current_game_state is not None):
-                        if (current_game_state == "Preview" and game_data['gameState'] == "Live"):
-                            matrix.Clear()
-                        elif (current_game_state == "Live" and game_data['gameState'] == "Final"):
-                            pass
-                        if (current_game_state == "Final" and game_data['gameState'] == "Preview"):
-                            matrix.Clear()
-
-                    current_game_state = game_data['gameState']
-
-                    #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-                    nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-                    nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-                    
-                    if (current_game_state == "Preview"):
-                        print('should render')
-                        nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
-                        nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
-                        print('is it blocking code?')
-                        #pass
-                    elif(current_game_state == "Live" or current_game_state == "Final"):
-                        pass
-                    pass
-                
+                render_output = render_board(current_board_state, shared_board_state, current_game_state, game_data, matrix, font, team_colors, color_white)
+                current_game_state = render_output['gameState']
                 # Update current board state for next iteration of loop
                 # dont need this, setting in set_team_and_fetch_nhl_data
                 current_board_state = shared_board_state.value
