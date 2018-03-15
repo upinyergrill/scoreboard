@@ -123,14 +123,12 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                             #pass
                         elif(current_game_state == "Live" or current_game_state == "Final"):
                             pass
-                        pass
 
                 # Update current board state for next iteration of loop
                 # dont need this, setting in set_team_and_fetch_nhl_data
                 current_board_state = shared_board_state.value
-                if True:
-                    game_data = rest_api_queue.get(False)
-            except: 
+                game_data = rest_api_queue.get(False)
+            except:
                 pass
 
 def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_state, shared_board_brightness, shared_sleep_timer):
