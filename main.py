@@ -249,7 +249,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
                 # now both pre and live have gameState
                 parsed_pre_game_data['gameState'] = "Preview"
                 rest_api_queue.put(parsed_pre_game_data)
-                seconds_to_sleep = 60
+                seconds_to_sleep = 15
                 print('is preview')
             elif (game_state == "Live"):
                 rest_api_queue.put(parsed_live_game_data)
