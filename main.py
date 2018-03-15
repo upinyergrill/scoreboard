@@ -165,13 +165,15 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
             and the next game doesn't for more than 15 minutes from now
             shared_sleep_timer == 0 means don't turn off ever
         '''
+        # Is the sleep timer set
         if shared_sleep_timer.value != 0:
-            # did it just turn on, boot_time
-            # did the team change
-            
+            print('sleep timer set')
+            # did it just turn on, boot_time or did the team change            
             if time.time() > (boot_time + (shared_sleep_timer.value * 60)) or current_team_id != shared_mem_team.value:
+                print('time since boot greater than boot time plus sleep')
                 # did the board state change from 0 to 1
                 if current_board_state == 0 and shared_board_state.value == 1:
+                    print('current board state 0 and shared_board_state 1')
                     # game is not over
                     if game_end_time is not None:
                         # its been the sleep timer value since the game ended
