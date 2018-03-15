@@ -129,7 +129,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 current_board_state = shared_board_state.value
                 game_data = rest_api_queue.get(False)
                 time.sleep(5)
-            except:
+            except Exception as e:
+                print('e', e)
                 time.sleep(10)
                 pass
 
