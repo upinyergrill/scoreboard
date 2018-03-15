@@ -43,7 +43,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
 
     game_data = {}
 
-    current_game_data = {}
+    #current_game_data = {}
 
     while True:
         # init board state
@@ -68,14 +68,12 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
 
         while True:
             try:
-                if True:
-                    game_data = rest_api_queue.get(False)
                 if game_data:
                     
                     # We will hold on to this game_data incase we break from this looop
                     # to reallocate the matrix with a new brightness, and we can rerender
                     # the data before we start waiting for new data
-                    current_game_data = game_data
+                    #current_game_data = game_data
                     # If brightness changes, re-render the board
                     if (current_brightness != shared_board_brightness.value):
                         # TODO: I'm not sure if this will make the matrix __dealloc__
@@ -130,8 +128,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 # Update current board state for next iteration of loop
                 # dont need this, setting in set_team_and_fetch_nhl_data
                 current_board_state = shared_board_state.value
-
-                
+                if True:
+                    game_data = rest_api_queue.get(False)
             except: 
                 pass
 
