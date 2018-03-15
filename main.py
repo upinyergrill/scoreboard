@@ -34,6 +34,7 @@ def render_board(current_board_state, shared_board_state, current_game_state, ga
     else:
         print('display board data')
         print('current_game_state', current_game_state)
+        print('game_data', game_data)
         # Check if the game state has changed
         # life cylce
         # preview -> live   | Clear
