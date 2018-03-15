@@ -1,4 +1,4 @@
-from rgbmatrix import graphics
+from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from scrollable_text import ScrollableText
 
 def draw_away_team_pre_game(matrix, font, color, game_data):
@@ -70,6 +70,16 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
     # Try catch so we don't blow up the board if it errors
     try:
         scroll_text = ScrollableText()
+        # RGBMatrix Options
+        options = RGBMatrixOptions()
+        options.rows = 32
+        options.chain_length = 2
+        options.brightness = 20
+        options.gpio_slowdown = 2
+        options.drop_privileges = 0
+
+        # Create matrix with optiosn
+        matrix = RGBMatrix(options = options)
         scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
     except Exception as e:
         print('e', e)
