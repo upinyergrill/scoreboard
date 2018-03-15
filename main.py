@@ -120,7 +120,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                             print('should render')
                             nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
                             nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
-                            nhlboardrender.draw_scrolling_next_game(matrix, font, color_white, team_color, game_data, options)
+                            scroll_process = Process(target=nhlboardrender.draw_scrolling_next_game, args=(matrix, font, color_white, team_color, game_data, options,))
+                            scroll_process.start()
                             print('is it blocking code?')
                             #pass
                         elif(current_game_state == "Live" or current_game_state == "Final"):
