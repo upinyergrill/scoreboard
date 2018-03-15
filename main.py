@@ -17,16 +17,21 @@ import nhl_teams as nhlteams
 def render_board(current_board_state, shared_board_state, current_game_state, game_data, matrix, font, team_colors, color_white):
     #in: current_board_state, shared_board_state, current_game_state, game_data, matrix
     #out: current_game_state
+    print('start render_board')
     output_object = {}
     if game_data != None:
+        print('game_data is None')
         return output_object
 
     if (current_board_state == 1 and shared_board_state.value == 0):
+        print('clear matrix')
         matrix.Clear()
     elif (current_board_state == 0 and shared_board_state.value ==0):
         # The board is off, leave it offs
+        print ('board is off')
         pass
     else:
+        print('display board data')
         # Check if the game state has changed
         # life cylce
         # preview -> live   | Clear
