@@ -38,20 +38,25 @@ def render_board(current_board_state, shared_board_state, current_game_state, ga
         # live -> final     | Don't clear
         # final -> preview  | Clear
         if (current_game_state is not None):
+            print('a')
             if (current_game_state == "Preview" and game_data['gameState'] == "Live"):
+                print('b')
                 matrix.Clear()
             elif (current_game_state == "Live" and game_data['gameState'] == "Final"):
+                print('c')
                 pass
             if (current_game_state == "Final" and game_data['gameState'] == "Preview"):
+                print('d')
                 matrix.Clear()
 
         #current_game_state = game_data['gameState']
         output_object['gameState'] = game_data['gameState']
+        print('e')
 
         #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
         nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
         nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-        
+        print('f')
         if (current_game_state == "Preview"):
             print('should render')
             nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
