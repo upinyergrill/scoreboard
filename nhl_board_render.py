@@ -67,8 +67,9 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
     message = "NEXT GAME|" + game_data['gameStartDateTimeFormatted']
     border_pixels = [[0, 30],[0, 29],[0, 28],[0, 27],[0, 26],[63, 30],[63, 29],[63, 28],[63, 27],[63, 26]]
     print(message)
-    try:
-        scroll_text = ScrollableText()
-        scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
-    except Exception as e:
-        print('e', e)
+    for _ in range(0, 3):
+        try:
+            scroll_text = ScrollableText()
+            scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
+        except Exception as e:
+            print('e', e)
