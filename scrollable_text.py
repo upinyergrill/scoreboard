@@ -18,6 +18,6 @@ class ScrollableText(object):
             graphics.DrawText(matrix, font, pos, y, color, message)
             if border_pixels and border_color:
                 for pixel in border_pixels:
-                    matrix.SetPixel(pixel[0], pixel[1], border_color[0], border_color[1], border_color[2])
+                    matrix.SetPixel(pixel[0], pixel[1], border_color['r'], border_color['g'], border_color['b'])
             pos = pos - 1
             time.sleep(0.05)
