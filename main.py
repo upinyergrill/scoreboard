@@ -108,13 +108,15 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                         current_game_state = game_data['gameState']
 
                         #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-                        nhlboardrender.draw_outer_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-                        nhlboardrender.draw_time_period_border(matrix, font, team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
+                        team_color = team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b']
+                        nhlboardrender.draw_outer_border(matrix, font, team_color)
+                        nhlboardrender.draw_time_period_border(matrix, font, team_color)
                         
                         if (current_game_state == "Preview"):
                             print('should render')
                             nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
                             nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
+                            nhlboardrender.draw_scrolling_next_game(matrix, font, color_white, team_color, game_data, options)
                             print('is it blocking code?')
                             #pass
                         elif(current_game_state == "Live" or current_game_state == "Final"):

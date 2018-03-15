@@ -225,6 +225,9 @@ def get_parsed_pre_game_data(game_data):
         game['gameStartDateTime'] = (
             dateutil.parser.parse(game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gameDate'])
         )
+        game['gameStartDateTimeFormatted'] = (
+            format_game_datetime(dateutil.parser.parse(game_data['teams'][0]['nextGameSchedule']['dates'][0]['games'][0]['gameDate']))
+        )
 
     return game
 
