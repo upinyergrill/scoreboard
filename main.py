@@ -181,12 +181,12 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
                             with shared_board_state.get_lock():
                                 shared_board_state.value = 0
 
-            game_start_time = time.mktime(parsed_pre_game_data['gameStartDateTime'].timetuple())
-            time_until_next_game_starts = game_start_time - time.time()
-            # the game won't start for more than the sleep timers value
-            if time_until_next_game_starts > shared_sleep_timer.value * 60:
-                with shared_board_state.get_lock():
-                    shared_board_state.value = 0
+                    game_start_time = time.mktime(parsed_pre_game_data['gameStartDateTime'].timetuple())
+                    time_until_next_game_starts = game_start_time - time.time()
+                    # the game won't start for more than the sleep timers value
+                    if time_until_next_game_starts > shared_sleep_timer.value * 60:
+                        with shared_board_state.get_lock():
+                            shared_board_state.value = 0
 
 
         # Store what the current team is for comparison
