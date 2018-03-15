@@ -36,14 +36,12 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
     team_colors = json.load(open('Assets/nhlcolors.json'))
     color_white = graphics.Color(255, 255, 255)
 
-
-     # Keep track of game state
+    # Keep track of game state
     # this way we can clear the board to get ready for a new view
     current_game_state = None
 
+    # init for if statment
     game_data = {}
-
-    #current_game_data = {}
 
     while True:
         # init board state
@@ -61,10 +59,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
 
         # Create matrix with optiosn
         matrix = RGBMatrix(options = options)
-        
-        print('the board started')
 
-       
+        print('the board started')
 
         while True:
             try:
