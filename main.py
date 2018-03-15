@@ -68,7 +68,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
 
         while True:
             try:
-                
+                if True:
+                    game_data = rest_api_queue.get(False)
                 if game_data:
                     
                     # We will hold on to this game_data incase we break from this looop
@@ -130,8 +131,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 # dont need this, setting in set_team_and_fetch_nhl_data
                 current_board_state = shared_board_state.value
 
-                game_data = rest_api_queue.get(False)
-            except Exception as e: 
+                
+            except: 
                 pass
 
 def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_state, shared_board_brightness, shared_sleep_timer):
