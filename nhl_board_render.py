@@ -69,17 +69,27 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
     print(message)
     # Try catch so we don't blow up the board if it errors
     try:
-        scroll_text = ScrollableText()
-        # RGBMatrix Options
+        ''' TODO
+            so the scrolly text needs to be a sub process so its non blocking
+            but we found that matrix didn't seem to be successfully passed in
+            I tested by making another matrix and sure enough it worked,
+            but it looked super wack with flicking pixels
+            Another problem with it is that we need a way to tell the scroll text
+            to stop when something has changed like the team or brightness
+            meaning we need to bubble up the game_data queue message we get
+            for that same stuff on the board process
+        '''
+        ''' # RGBMatrix Options
         options = RGBMatrixOptions()
         options.rows = 32
         options.chain_length = 2
         options.brightness = 20
         options.gpio_slowdown = 2
         options.drop_privileges = 0
-
         # Create matrix with optiosn
-        matrix = RGBMatrix(options = options)
+        matrix = RGBMatrix(options = options) '''
+
+        scroll_text = ScrollableText()
         scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
     except Exception as e:
         print('e', e)
