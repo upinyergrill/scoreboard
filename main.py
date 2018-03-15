@@ -169,8 +169,7 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
             # did it just turn on, boot_time
             # did the team change
             
-            if time.time() > boot_time + shared_sleep_timer.value * 60 or
-                current_team_id != shared_mem_team.value:
+            if time.time() > (boot_time + (shared_sleep_timer.value * 60)) or current_team_id != shared_mem_team.value:
                 # did the board state change from 0 to 1
                 if current_board_state == 0 and shared_board_state.value == 1:
                     # game is not over
