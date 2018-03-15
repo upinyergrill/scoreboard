@@ -296,7 +296,7 @@ rest_api_queue = Queue()
 shared_memory_team_id = Value('i', settings['team_id'])
 
 # At runtime set the board to be on
-shared_memory_board_state = Value('i', 0)
+shared_memory_board_state = Value('i', 1)
 
 # At runtime set the board to automically turn off after a certain amout of time
 shared_memory_sleep_timer = Value('i', settings['sleep_timer'])
