@@ -24,29 +24,29 @@ def clear_area(matrix, x, y, w, h):
 def draw_time_period_border(matrix, font, color):
     # Draw lines to contain time and period info
     for y in range(8, 23):
-        matrix.SetPixel(20, y, color['r'], color['g'], color['b'])
+        matrix.SetPixel(20, y, color)
     for y in range(8, 23):
-        matrix.SetPixel(42, y, color['r'], color['g'], color['b'])
+        matrix.SetPixel(42, y, color)
 
     for x in range(21, 42):
-        matrix.SetPixel(x, 8, color['r'], color['g'], color['b'])
+        matrix.SetPixel(x, 8, color)
     for x in range(21, 42):
-        matrix.SetPixel(x, 22, color['r'], color['g'], color['b'])
+        matrix.SetPixel(x, 22, color)
 
     for y in range(1, 8):
-        matrix.SetPixel(31, y, color['r'], color['g'], color['b'])
+        matrix.SetPixel(31, y, color)
 
 def draw_outer_border(matrix, font, color):
     # Scoreboard border
     for y in range(0, 32):
-        matrix.SetPixel(0, y, color['r'], color['g'], color['b'])
+        matrix.SetPixel(0, y, color)
     for y in range(0, 32):
-        matrix.SetPixel(63, y, color['r'], color['g'], color['b'])
+        matrix.SetPixel(63, y, color)
 
     for x in range(0, 64):
-        matrix.SetPixel(x, 0, color['r'], color['g'], color['b'])
+        matrix.SetPixel(x, 0, color)
     for x in range(0, 64):
-        matrix.SetPixel(x, 31, color['r'], color['g'], color['b'])
+        matrix.SetPixel(x, 31, color)
 
 def draw_home_team_pre_game(matrix, font, color, game_data):
     clear_area(matrix, 48, 7, 12, 6)

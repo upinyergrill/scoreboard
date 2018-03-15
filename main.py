@@ -108,11 +108,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                         current_game_state = game_data['gameState']
 
                         #print(team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b'])
-                        team_color = {
-                            'r':team_colors[str(game_data['currentTeamId'])]['r'],
-                            'g':team_colors[str(game_data['currentTeamId'])]['g'],
-                            'b':team_colors[str(game_data['currentTeamId'])]['b']
-                        }
+                        team_color = team_colors[str(game_data['currentTeamId'])]['r'], team_colors[str(game_data['currentTeamId'])]['g'], team_colors[str(game_data['currentTeamId'])]['b']
+
                         nhlboardrender.draw_outer_border(matrix, font, team_color)
                         nhlboardrender.draw_time_period_border(matrix, font, team_color)
                         
