@@ -76,6 +76,13 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
     #board_process = Process(target=board, args=(rest_api_queue,))
     #board_process.start()
 
+    # Keep track of game state
+    # this way we can clear the board to get ready for a new view
+    current_game_state = None
+
+    # init 
+    current_game_data = None
+
     # Things that wont change on board
     font = graphics.Font()
     font.LoadFont('Assets/tom-thumb.bdf')
@@ -101,12 +108,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
         
         print('the board started')
 
-        # Keep track of game state
-        # this way we can clear the board to get ready for a new view
-        current_game_state = None
-
-        # init 
-        current_game_data = None
+        
 
         while True:
             try:
