@@ -130,7 +130,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                 # dont need this, setting in set_team_and_fetch_nhl_data
                 current_board_state = shared_board_state.value
             except Exception as e: 
-                print('e', e)
+                pass
 
 def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_state, shared_board_brightness, shared_sleep_timer):
     # At runtime set the shared_mem_team value (the settings team id)
