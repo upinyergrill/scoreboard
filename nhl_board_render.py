@@ -103,7 +103,7 @@ def draw_live_helper(matrix, font, color, game_data):
     draw_home_team_score(matrix, font, color, game_data)
     draw_away_team_score(matrix, font, color, game_data)
     draw_period(matrix, font, color, game_data)
-    draw_carousel_faceoff(matrix, font, color, game_data)
+    draw_carousel_takeaway(matrix, font, color, game_data)
 
 def draw_carousel_sog(matrix, font, color, game_data):
     clear_area(matrix, 15, 30, 8, 6)
@@ -122,27 +122,28 @@ def draw_carousel_hits(matrix, font, color, game_data):
     graphics.DrawText(matrix, font, 43, 30, color, str(game_data['homeHits']))
 
 def draw_carousel_blocked(matrix, font, color, game_data):
-    clear_area(matrix, 13, 30, 8, 6)
-    clear_area(matrix, 13, 30, 28, 6)
-    clear_area(matrix, 13, 30, 8, 6)
+    clear_area(matrix, 7, 30, 8, 6)
+    clear_area(matrix, 18, 30, 28, 6)
+    clear_area(matrix, 49, 30, 8, 6)
     graphics.DrawText(matrix, font, 7, 30, color, str(game_data['awayBlocked']))
     graphics.DrawText(matrix, font, 18, 30, color, "BLOCKED")
     graphics.DrawText(matrix, font, 49, 30, color, str(game_data['homeBlocked']))
 
 def draw_carousel_faceoff(matrix, font, color, game_data):
     clear_area(matrix, 7, 30, 16, 6)
+    clear_area(matrix, 26, 30, 12, 6)
+    clear_area(matrix, 41, 30, 16, 6)
     graphics.DrawText(matrix, font, 7, 30, color, str(game_data['awayFoWins']))
     graphics.DrawText(matrix, font, 26, 30, color, "FO%")
     graphics.DrawText(matrix, font, 41, 30, color, str(game_data['homeFoWins']))
-    
 
 def draw_carousel_takeaway(matrix, font, color, game_data):
-    away_takeaway = str(nhlgameinfo.awayTakeaways())
-    home_takeaway = str(nhlgameinfo.homeTakeaways())
-    clearInfo()
+    clear_area(matrix, 3, 30, 8, 6)
+    clear_area(matrix, 14, 30, 36, 6)
+    clear_area(matrix, 53, 30, 8, 6)
+    graphics.DrawText(matrix, font, 3, 30, color, str(game_data['awayTakeaways']))
     graphics.DrawText(matrix, font, 14, 30, color, "TAKEAWAYS")
-    graphics.DrawText(matrix, font, 53, 30, color, home_takeaway)
-    graphics.DrawText(matrix, font, 3, 30, color, away_takeaway)
+    graphics.DrawText(matrix, font, 53, 30, color, str(game_data['homeTakeaways']))
 
 def draw_carousel_giveaway(matrix, font, color, game_data):
     away_giveaway = str(nhlgameinfo.awayGiveaways())
