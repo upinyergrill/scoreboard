@@ -2,6 +2,13 @@ from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from multiprocessing import Value, Process, Queue, Array
 import time
 
+def subproc(matrix):
+    matrix.SetPixel(25, 2, 0, 255, 0)
+    matrix.SetPixel(25, 3, 0, 255, 0)
+    matrix.SetPixel(25, 4, 0, 255, 0)
+    matrix.SetPixel(25, 5, 0, 255, 0)
+    print('print subproc')
+
 # RGBMatrix Options
 options = RGBMatrixOptions()
 options.rows = 32
@@ -21,12 +28,5 @@ print('print main')
 
 scroll_process = Process(target=subproc, args=(matrix,))
 scroll_process.start()
-
-def subproc(matrix):
-    matrix.SetPixel(25, 2, 0, 255, 0)
-    matrix.SetPixel(25, 3, 0, 255, 0)
-    matrix.SetPixel(25, 4, 0, 255, 0)
-    matrix.SetPixel(25, 5, 0, 255, 0)
-    print('print subproc')
 
 time.sleep(999)
