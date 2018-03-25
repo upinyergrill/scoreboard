@@ -1,5 +1,5 @@
 from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
-import threading
+from threading import Thread
 import time
 
 
@@ -13,9 +13,9 @@ def subproc(matrix):
 exitFlag = 0
 
 
-class myThread (threading.Thread):
+class myThread (Thread):
     def __init__(self, threadID, name, matrix):
-        threading.Thread.__init__(self)
+        Thread.__init__(self)
         self.threadID = threadID
         self.name = name
         self.matrix = matrix
