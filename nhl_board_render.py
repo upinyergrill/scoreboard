@@ -87,8 +87,8 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
         options.gpio_slowdown = 2
         options.drop_privileges = 0
         # Create matrix with optiosn
-        matrix = RGBMatrix(options = options) '''
-
+        #matrix = RGBMatrix(options = options) '''
+        print(matrix)
         scroll_text = ScrollableText()
         scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
     except Exception as e:
