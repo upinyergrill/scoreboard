@@ -62,11 +62,11 @@ def draw_home_team_pre_game(matrix, font, color, game_data):
     graphics.DrawText(matrix, font, 46, 19, color, home_lose)
     graphics.DrawText(matrix, font, 46, 25, color, home_otl)
 
-def draw_scrolling_next_game(matrix):
-    #clear_area(matrix, 1, 31, 61, 6)
-    #message = "NEXT GAME|" + game_data['gameStartDateTimeFormatted']
-    #border_pixels = [[0, 30],[0, 29],[0, 28],[0, 27],[0, 26],[63, 30],[63, 29],[63, 28],[63, 27],[63, 26]]
-    #print(message)
+def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, options):
+    clear_area(matrix, 1, 31, 61, 6)
+    message = "NEXT GAME|" + game_data['gameStartDateTimeFormatted']
+    border_pixels = [[0, 30],[0, 29],[0, 28],[0, 27],[0, 26],[63, 30],[63, 29],[63, 28],[63, 27],[63, 26]]
+    print(message)
     # Try catch so we don't blow up the board if it errors
     try:
         ''' TODO
@@ -87,18 +87,14 @@ def draw_scrolling_next_game(matrix):
         options.gpio_slowdown = 2
         options.drop_privileges = 0 '''
         # Create matrix with optiosn
-        print(matrix)
-
-        matrix.SetPixel(25, 2, 0, 0, 255)
-        matrix.SetPixel(25, 3, 0, 0, 255)
-        matrix.SetPixel(25, 4, 0, 0, 255)
-        matrix.SetPixel(25, 5, 0, 0, 255)
-
-        print('printed blue line')
-        #matrix = RGBMatrix(options = options)
         #print(matrix)
-        
-        #print('wrote blue pixel')
+        #matrix = RGBMatrix(options = options)
+        print(matrix)
+        matrix.SetPixel(2, 2, 0, 0, 255)
+        matrix.SetPixel(3, 3, 0, 0, 255)
+        matrix.SetPixel(4, 4, 0, 0, 255)
+        matrix.SetPixel(5, 5, 0, 0, 255)
+        print('wrote blue pixel')
         #scroll_text = ScrollableText()
         #scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
     except Exception as e:
