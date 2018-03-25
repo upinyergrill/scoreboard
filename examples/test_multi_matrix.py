@@ -47,4 +47,5 @@ print("Exiting Main Thread")
 #scroll_process = Process(target=subproc, args=(matrix,))
 #scroll_process.start()
 
-time.sleep(10)
+time.sleep(1)
+print('after sleep')
