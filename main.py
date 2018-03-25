@@ -47,10 +47,10 @@ shared_memory_sleep_timer = Value('i', settings['sleep_timer'])
 shared_memory_board_brightness = Value('i', settings['brightness'])
 
 # Create the process for getting data in a loop
-nhl_data_process = Process(target=controller.set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,shared_memory_board_state,shared_memory_board_brightness,shared_memory_sleep_timer,font,team_colors,))
+nhl_data_process = Process(target=controller.set_team_and_fetch_nhl_data, args=(shared_memory_team_id,rest_api_queue,shared_memory_board_state,shared_memory_board_brightness,shared_memory_sleep_timer,))
 
 # Create the process for running the board
-board_process = Process(target=view.board, args=(rest_api_queue,shared_memory_board_state,shared_memory_board_brightness,))
+board_process = Process(target=view.board, args=(rest_api_queue,shared_memory_board_state,shared_memory_board_brightness,font,team_colors,))
 
 # Start processes
 nhl_data_process.start()
