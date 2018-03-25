@@ -69,7 +69,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                     current_brightness = shared_board_brightness.value
 
                     print('board got game data')
-                    print(game_data)
+                    #print(game_data)
                     print('current_board_state', current_board_state)
                     print('shared_board_state', shared_board_state.value)
                     # Clear the board, but only clear if the state has changed from 1 to 0
