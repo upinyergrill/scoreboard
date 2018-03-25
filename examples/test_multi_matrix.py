@@ -2,7 +2,6 @@ from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from threading import Thread
 import time
 
-
 def subproc(matrix):
     matrix.SetPixel(25, 2, 0, 255, 0)
     matrix.SetPixel(25, 3, 0, 255, 0)
@@ -10,22 +9,15 @@ def subproc(matrix):
     matrix.SetPixel(25, 5, 0, 255, 0)
     print('print subproc')
 
-exitFlag = 0
-
-
 class myThread (Thread):
-    def __init__(self, threadID, name, matrix):
+    def __init__(self, matrix):
         Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
         self.matrix = matrix
 
     def run(self):
         print("Starting " + self.name)
         subproc(self.matrix)
         print("Exiting " + self.name)
-
-
 
 # RGBMatrix Options
 options = RGBMatrixOptions()
@@ -45,7 +37,7 @@ matrix.SetPixel(23, 5, 0, 0, 255)
 print('print main')
 
 # Create new threads
-thread1 = myThread(1, "Thread-1", matrix)
+thread1 = myThread(matrix)
 
 # Start new Threads
 thread1.start()
@@ -56,4 +48,4 @@ print("Exiting Main Thread")
 #scroll_process = Process(target=subproc, args=(matrix,))
 #scroll_process.start()
 
-time.sleep(999)
+time.sleep(10)
