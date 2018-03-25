@@ -59,9 +59,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                     #current_game_data = game_data
                     # If brightness changes, re-render the board
                     if (current_brightness != shared_board_brightness.value):
-                        # TODO: I'm not sure if this will make the matrix __dealloc__
-                        # or not but i saw in the source the class's __dealloc__ method
-                        # has the Clear function in it, so it shoudl be easy to test
+                        # matrix __dealloc__
                         matrix = None
                         break
                     
@@ -121,7 +119,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 # tell thread to stop because we have new data now
                 with break_scroll_loop.get_lock():
                     break_scroll_loop.value = True
-                #time.sleep(5)
+                print('end of loop')
             except Exception as e:
                 print('e', e)
                 #time.sleep(10)
