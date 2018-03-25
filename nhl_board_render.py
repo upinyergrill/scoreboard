@@ -138,12 +138,12 @@ def draw_carousel_faceoff(matrix, font, color, game_data):
     graphics.DrawText(matrix, font, 41, 30, color, str(game_data['homeFoWins']))
 
 def draw_carousel_takeaway(matrix, font, color, game_data):
-    clear_area(matrix, 3, 30, 8, 6)
-    clear_area(matrix, 14, 30, 36, 6)
-    clear_area(matrix, 53, 30, 8, 6)
-    graphics.DrawText(matrix, font, 3, 30, color, str(game_data['awayTakeaways']))
-    graphics.DrawText(matrix, font, 14, 30, color, "TAKEAWAYS")
-    graphics.DrawText(matrix, font, 53, 30, color, str(game_data['homeTakeaways']))
+    clear_area(matrix, 4, 30, 8, 6)
+    clear_area(matrix, 15, 30, 36, 6)
+    clear_area(matrix, 54, 30, 8, 6)
+    graphics.DrawText(matrix, font, 4, 30, color, str(game_data['awayTakeaways']))
+    graphics.DrawText(matrix, font, 15, 30, color, "TAKEAWAYS")
+    graphics.DrawText(matrix, font, 54, 30, color, str(game_data['homeTakeaways']))
 
 def draw_carousel_giveaway(matrix, font, color, game_data):
     away_giveaway = str(nhlgameinfo.awayGiveaways())
