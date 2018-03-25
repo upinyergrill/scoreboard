@@ -138,6 +138,10 @@ def change_board_brightness(board_brightness):
         # TODO: make this update the settings.json file
         with shared_memory_board_brightness.get_lock():
             shared_memory_board_brightness.value = board_brightness
+        settings = json.load(open('settings.json'))
+        settings['brightness'] = board_brightness
+        with open('settings.json', 'w') as outfile:
+            json.dump(settings, outfile)
         res = json.dumps({'brightness': board_brightness},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
     else:
