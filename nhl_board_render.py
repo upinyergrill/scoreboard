@@ -103,23 +103,24 @@ def draw_live_helper(matrix, font, color, game_data):
     draw_home_team_score(matrix, font, color, game_data)
     draw_away_team_score(matrix, font, color, game_data)
     draw_period(matrix, font, color, game_data)
-    draw_carousel_sog(matrix, font, color, game_data)
+    draw_carousel_hits(matrix, font, color, game_data)
 
 def draw_carousel_sog(matrix, font, color, game_data):
     clear_area(matrix, 15, 30, 8, 6)
-    graphics.DrawText(matrix, font, 15, 30, color, str(game_data['awaySog']))
     clear_area(matrix, 26, 30, 12, 6)
-    graphics.DrawText(matrix, font, 26, 30, color, "SoG")
     clear_area(matrix, 41, 30, 8, 6)
+    graphics.DrawText(matrix, font, 15, 30, color, str(game_data['awaySog']))
+    graphics.DrawText(matrix, font, 26, 30, color, "SoG")
     graphics.DrawText(matrix, font, 41, 30, color, str(game_data['homeSog']))
     
 def draw_carousel_hits(matrix, font, color, game_data):
-    away_hits = str(nhlgameinfo.awayHits())
-    home_hits = str(nhlgameinfo.homeHits())
-    clearInfo()
+    clear_area(matrix, 13, 30, 8, 6)
+    clear_area(matrix, 24, 30, 16, 6)
+    clear_area(matrix, 43, 30, 8, 6)
+    graphics.DrawText(matrix, font, 13, 30, color, str(game_data['awayHits']))
     graphics.DrawText(matrix, font, 24, 30, color, "HITS")
-    graphics.DrawText(matrix, font, 43, 30, color, home_hits)
-    graphics.DrawText(matrix, font, 13, 30, color, away_hits)
+    graphics.DrawText(matrix, font, 43, 30, color, str(game_data['homeHits']))
+    
 
 def draw_carousel_blocked(matrix, font, color, game_data):
     away_blocked = str(nhlgameinfo.awayBlocks())
