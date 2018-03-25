@@ -50,19 +50,19 @@ def get_parsed_live_game_data(game_data):
     )
 
     game['awayScore'] = (
-        game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['goals']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['goals'])
     )
 
     game['homeScore'] = (
-        game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['goals']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['goals'])
     )
 
     game['awaySog'] = (
-        game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['shots']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['shots'])
     )
 
     game['homeSog'] = (
-        game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['shots']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['shots'])
     )
 
     game['awaySkaters'] = (
@@ -82,35 +82,35 @@ def get_parsed_live_game_data(game_data):
     )
 
     game['awayHits'] = (
-        game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['hits']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['hits'])
     )
 
     game['homeHits'] = (
-        game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['hits']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['hits'])
     )
 
     game['awayBlocked'] = (
-        game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['blocked']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['blocked'])
     )
 
     game['homeBlocked'] = (
-        game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['blocked']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['blocked'])
     )
 
     game['awayTakeaways'] = (
-        game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['takeaways']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['takeaways'])
     )
 
     game['homeTakeaways'] = (
-        game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['takeaways']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['takeaways'])
     )
 
     game['awayGiveaways'] = (
-        game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['giveaways']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['giveaways'])
     )
 
     game['homeGiveaways'] = (
-        game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['giveaways']
+        "{0:0=2d}".format(game_data['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['giveaways'])
     )
 
     game['awayFoWins'] = (
