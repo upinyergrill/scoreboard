@@ -18,8 +18,9 @@ def preview(matrix, font, color, game_data):
 def clear_area(matrix, x, y, w, h):
     '''Make this so it doesn't overwite borders on accident, maths
     '''
+    width = w - 1
     for i in range(y-h, y):
-        graphics.DrawLine(matrix, x, i, x+w, i, graphics.Color(255, 0, 0))
+        graphics.DrawLine(matrix, x, i, x+width, i, graphics.Color(255, 0, 0))
 
 def draw_time_period_border(matrix, font, color):
     # Draw lines to contain time and period info
@@ -70,9 +71,9 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
     scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color, break_loop)
 
 def draw_away_team_abbr(matrix, font, color, game_data):
-    clear_area(matrix, 20, 7, 12, 6)
+    clear_area(matrix, 5, 7, 12, 6)
     # Score positions
-    graphics.DrawText(matrix, font, 20, 7, color, str(game_data['awayTeam']))
+    graphics.DrawText(matrix, font, 5, 7, color, str(game_data['homeTeam']))
 
 def draw_home_team_abbr(matrix, font, color, game_data):
     clear_area(matrix, 47, 7, 12, 6)
