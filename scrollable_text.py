@@ -12,8 +12,8 @@ class ScrollableText(object):
         for _ in message_len:
             # using shared memory value
             if break_loop:
-                print('break_loop.value: ', bool(break_loop.value))
                 if bool(break_loop.value) is True:
+                    print('break from scrollable text')
                     break
             for x_idx, _ in enumerate(list(range(64))):
                 for y_idx, _ in enumerate(list(range(char_height))):
