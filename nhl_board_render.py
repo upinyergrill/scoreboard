@@ -79,7 +79,7 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
             meaning we need to bubble up the game_data queue message we get
             for that same stuff on the board process
         '''
-        ''' # RGBMatrix Options
+        # RGBMatrix Options
         options = RGBMatrixOptions()
         options.rows = 32
         options.chain_length = 2
@@ -87,7 +87,8 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
         options.gpio_slowdown = 2
         options.drop_privileges = 0
         # Create matrix with optiosn
-        #matrix = RGBMatrix(options = options) '''
+        print(matrix)
+        matrix = RGBMatrix(options = options) '''
         print(matrix)
         matrix.SetPixel(2, 2, 0, 95, 255)
         print('wrote blue pixel')
