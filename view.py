@@ -27,9 +27,6 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
     # init for if statment
     game_data = {}
 
-    # init for break
-    break_scroll_loop = Value('i', False)
-
     while True:
         # init board state
         current_board_state = shared_board_state.value
@@ -51,7 +48,10 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
 
         while True:
             try:
-                
+                # init for break
+                # This gives a new shared memory object
+                # per run of the loop.
+                break_scroll_loop = Value('i', False)
 
                 if game_data:
                     
