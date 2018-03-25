@@ -123,6 +123,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 # tell thread to stop because we have new data now
                 with break_scroll_loop.get_lock():
                     break_scroll_loop.value = True
+                    print('set break_scroll_loop to True')
                 print('end of loop')
             except Exception as e:
                 print('e', e)
