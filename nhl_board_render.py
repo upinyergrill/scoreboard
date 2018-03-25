@@ -62,9 +62,9 @@ def draw_home_team_pre_game(matrix, font, color, game_data):
     graphics.DrawText(matrix, font, 46, 19, color, home_lose)
     graphics.DrawText(matrix, font, 46, 25, color, home_otl)
 
-def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data):
+def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, break_loop):
     clear_area(matrix, 1, 31, 61, 6)
     message = "NEXT GAME|" + game_data['gameStartDateTimeFormatted']
     border_pixels = [[0, 30],[0, 29],[0, 28],[0, 27],[0, 26],[63, 30],[63, 29],[63, 28],[63, 27],[63, 26]]
     scroll_text = ScrollableText()
-    scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
+    scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color, break_loop)

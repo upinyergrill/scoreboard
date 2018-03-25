@@ -3,13 +3,17 @@ from rgbmatrix import graphics, RGBMatrix, RGBMatrixOptions
 
 
 class ScrollableText(object):
-    def scroll(self, matrix, font, y, color, message, border_pixels=None, border_color=None):
+    def scroll(self, matrix, font, y, color, message, border_pixels=None, border_color=None, break_loop=None):
         if not border_pixels:
             border_pixels = []
         pos = 65
         char_height = 5
         message_len = list(range(len(message) * 4 + 65))
         for _ in message_len:
+            # using shared memory value
+            if break_loop:
+                if bool(break_loop.value) is True:
+                    break
             for x_idx, _ in enumerate(list(range(64))):
                 for y_idx, _ in enumerate(list(range(char_height))):
                     y_pixel = y - 1 - y_idx

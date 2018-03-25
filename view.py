@@ -2,6 +2,7 @@ from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 import json
 import nhl_board_render as nhlboardrender
 from matrix_thread import ScrollNextGameThread
+from multiprocessing import Value
 
 # The Board
 def board(rest_api_queue, shared_board_state, shared_board_brightness, font, team_colors):
@@ -25,6 +26,9 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
 
     # init for if statment
     game_data = {}
+
+    # init for break
+    break_scroll_loop = Value('i', False)
 
     while True:
         # init board state
@@ -104,7 +108,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                             nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
                             nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
                             # Must use threads for the matrix
-                            scroll_thread = ScrollNextGameThread(matrix, font, color_white, team_color, game_data)
+                            scroll_thread = ScrollNextGameThread(matrix, font, color_white, team_color, game_data, break_scroll_loop)
                             scroll_thread.start()
                         elif(current_game_state == "Live" or current_game_state == "Final"):
                             pass
@@ -112,7 +116,11 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 # Update current board state for next iteration of loop
                 # dont need this, setting in set_team_and_fetch_nhl_data
                 current_board_state = shared_board_state.value
+                print('board waiting for game data')
                 game_data = rest_api_queue.get()
+                # tell thread to stop because we have new data now
+                with break_scroll_loop.get_lock():
+                    break_scroll_loop.value = True
                 #time.sleep(5)
             except Exception as e:
                 print('e', e)
