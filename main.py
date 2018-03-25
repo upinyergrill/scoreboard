@@ -13,6 +13,11 @@ import nhl_teams as nhlteams
 import view
 import controller
 
+def update_settings(file, key, value):
+    settings = json.load(open(file))
+    settings[key] = value
+    with open(file, 'w') as outfile:
+        json.dump(settings, outfile)
 
 # Get the user settings 
 settings = json.load(open('settings.json'))
@@ -81,7 +86,7 @@ def show_team():
 def change_default_team(team_id):
     # Make sure the team they specified is valid
     if (any(team['id'] == team_id for team in active_nhl_teams)):
-        # TODO: make this update the setting.json file
+        update_settings('settings.json', 'team_id', team_id)
         res = json.dumps({'team_id': team_id},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
     else:
@@ -115,7 +120,7 @@ def get_board_state():
         res = json.dumps({'state': shared_memory_board_state.value},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
 
-@app.route('/board/timer/<int:sleep_timer>', methods=['GET'])
+''' @app.route('/board/timer/<int:sleep_timer>', methods=['GET'])
 def change_board_timer(sleep_timer):
     if 0 <= sleep_timer <= 1440:
         # TODO: make this update the settings.json file
@@ -131,17 +136,14 @@ def get_board_timer():
     settings = json.load(open('settings.json'))
     res = json.dumps({'timer': settings['sleep_timer']},  separators=(',',':'))
     return Response(res, status=200, mimetype='application/json')
-
+ '''
 @app.route('/board/brightness/<int:board_brightness>', methods=['GET'])
 def change_board_brightness(board_brightness):
     if 1 <= board_brightness <= 4:
         # TODO: make this update the settings.json file
         with shared_memory_board_brightness.get_lock():
             shared_memory_board_brightness.value = board_brightness
-        settings = json.load(open('settings.json'))
-        settings['brightness'] = board_brightness
-        with open('settings.json', 'w') as outfile:
-            json.dump(settings, outfile)
+        update_settings('settings.json', 'brightness', board_brightness)
         res = json.dumps({'brightness': board_brightness},  separators=(',',':'))
         return Response(res, status=200, mimetype='application/json')
     else:
