@@ -20,13 +20,6 @@ class MatrixThread (Thread):
         self.subproc()
         print("Exiting " + self.name)
 
-class ScrollMatrixThread (MatrixThread):
-    def __init__(self, matrix):
-        MatrixThread.__init__(matrix)
-
-    def run(self):
-        print('how does this work')
-
 # RGBMatrix Options
 options = RGBMatrixOptions()
 options.rows = 32
@@ -45,7 +38,7 @@ matrix.SetPixel(23, 5, 0, 0, 255)
 print('print main')
 
 # Create new threads
-some_thread = ScrollMatrixThread(matrix)
+some_thread = MatrixThread(matrix)
 
 # Start new Threads
 some_thread.start()
