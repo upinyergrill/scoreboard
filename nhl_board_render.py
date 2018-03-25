@@ -18,9 +18,10 @@ def preview(matrix, font, color, game_data):
 def clear_area(matrix, x, y, w, h):
     '''Make this so it doesn't overwite borders on accident, maths
     '''
-    width = w - 1
+    w = w - 1
+    h = h - 1
     for i in range(y-h, y):
-        graphics.DrawLine(matrix, x, i, x+width, i, graphics.Color(255, 0, 0))
+        graphics.DrawLine(matrix, x, i, x+w, i, graphics.Color(255, 0, 0))
 
 def draw_time_period_border(matrix, font, color):
     # Draw lines to contain time and period info
