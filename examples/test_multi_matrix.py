@@ -8,7 +8,7 @@ def subproc(matrix):
         time.sleep(1)
     print('print subproc')
 
-class myThread (Thread):
+class MatrixThread (Thread):
     def __init__(self, matrix):
         Thread.__init__(self)
         self.matrix = matrix
@@ -36,10 +36,10 @@ matrix.SetPixel(23, 5, 0, 0, 255)
 print('print main')
 
 # Create new threads
-thread1 = myThread(matrix)
+some_thread = MatrixThread(matrix)
 
 # Start new Threads
-thread1.start()
+some_thread.start()
 
 print("Exiting Main Thread")
 
