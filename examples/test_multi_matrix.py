@@ -10,6 +10,8 @@ def subproc(matrix):
     matrix.SetPixel(25, 5, 0, 255, 0)
     print('print subproc')
 
+exitFlag = 0
+
 
 class myThread (threading.Thread):
     def __init__(self, threadID, name, counter):
