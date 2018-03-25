@@ -3,10 +3,9 @@ from threading import Thread
 import time
 
 def subproc(matrix):
-    matrix.SetPixel(25, 2, 0, 255, 0)
-    matrix.SetPixel(25, 3, 0, 255, 0)
-    matrix.SetPixel(25, 4, 0, 255, 0)
-    matrix.SetPixel(25, 5, 0, 255, 0)
+    for i in range(1,10):
+        matrix.SetPixel(25, i, 0, 255, 0)
+        time.sleep(1)
     print('print subproc')
 
 class myThread (Thread):
@@ -41,7 +40,7 @@ thread1 = myThread(matrix)
 
 # Start new Threads
 thread1.start()
-thread1.join()
+
 print("Exiting Main Thread")
 
 
