@@ -51,6 +51,10 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
 
         while True:
             try:
+                # Reset break
+                with break_scroll_loop.get_lock():
+                    break_scroll_loop.value = False
+
                 if game_data:
                     
                     # We will hold on to this game_data incase we break from this looop
