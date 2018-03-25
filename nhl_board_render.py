@@ -62,40 +62,9 @@ def draw_home_team_pre_game(matrix, font, color, game_data):
     graphics.DrawText(matrix, font, 46, 19, color, home_lose)
     graphics.DrawText(matrix, font, 46, 25, color, home_otl)
 
-def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, options):
+def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data):
     clear_area(matrix, 1, 31, 61, 6)
     message = "NEXT GAME|" + game_data['gameStartDateTimeFormatted']
     border_pixels = [[0, 30],[0, 29],[0, 28],[0, 27],[0, 26],[63, 30],[63, 29],[63, 28],[63, 27],[63, 26]]
-    print(message)
-    # Try catch so we don't blow up the board if it errors
-    try:
-        ''' TODO
-            so the scrolly text needs to be a sub process so its non blocking
-            but we found that matrix didn't seem to be successfully passed in
-            I tested by making another matrix and sure enough it worked,
-            but it looked super wack with flicking pixels
-            Another problem with it is that we need a way to tell the scroll text
-            to stop when something has changed like the team or brightness
-            meaning we need to bubble up the game_data queue message we get
-            for that same stuff on the board process
-        '''
-        # RGBMatrix Options
-        ''' options = RGBMatrixOptions()
-        options.rows = 32
-        options.chain_length = 2
-        options.brightness = 20
-        options.gpio_slowdown = 2
-        options.drop_privileges = 0 '''
-        # Create matrix with optiosn
-        #print(matrix)
-        #matrix = RGBMatrix(options = options)
-        print(matrix)
-        matrix.SetPixel(2, 2, 0, 0, 255)
-        matrix.SetPixel(3, 3, 0, 0, 255)
-        matrix.SetPixel(4, 4, 0, 0, 255)
-        matrix.SetPixel(5, 5, 0, 0, 255)
-        print('wrote blue pixel')
-        #scroll_text = ScrollableText()
-        #scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)
-    except Exception as e:
-        print('e', e)
+    scroll_text = ScrollableText()
+    scroll_text.scroll(matrix, font, 31, text_color, message, border_pixels, border_color)

@@ -5,6 +5,7 @@
 '''
 from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from multiprocessing import Value, Process, Queue, Array
+from threading import Thread
 from flask import Flask
 from flask import Response
 import json
@@ -13,6 +14,7 @@ import nhl_game_data as nhlgamedata
 import nhl_board_render as nhlboardrender
 from datetime import datetime
 import nhl_teams as nhlteams
+from matrix_thread import ScrollNextGameThread
 
 def get_time_since_game_ended(seconds):
     return time.time() - seconds
@@ -120,8 +122,10 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
                             print('should render')
                             nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
                             nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
-                            scroll_process = Process(target=nhlboardrender.draw_scrolling_next_game, args=(matrix,font,color_white,team_color,game_data,options,))
-                            scroll_process.start()
+                            #scroll_process = Process(target=nhlboardrender.draw_scrolling_next_game, args=(matrix,font,color_white,team_color,game_data,options,))
+                            #scroll_process.start()
+                            scroll_thread = ScrollNextGameThread(matrix, font, color_white, team_color, game_data)
+                            scroll_thread.start()
                             print('is it blocking code?')
                             #pass
                         elif(current_game_state == "Live" or current_game_state == "Final"):
