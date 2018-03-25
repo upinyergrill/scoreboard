@@ -74,7 +74,7 @@ def draw_scrolling_next_game(matrix, font, text_color, border_color, game_data, 
 def draw_away_team_abbr(matrix, font, color, game_data):
     clear_area(matrix, 5, 7, 12, 6)
     # Score positions
-    graphics.DrawText(matrix, font, 5, 7, color, str(game_data['homeTeam']))
+    graphics.DrawText(matrix, font, 5, 7, color, str(game_data['awayTeam']))
 
 def draw_home_team_abbr(matrix, font, color, game_data):
     clear_area(matrix, 47, 7, 12, 6)
