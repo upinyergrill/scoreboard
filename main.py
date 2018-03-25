@@ -1,7 +1,7 @@
 ''' Execution Instructions
     su
-    export FLASK_APP=flask_example.py
-    python3 -m flash run
+    export FLASK_APP=main.py
+    python3 -m flask run
 '''
 from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from multiprocessing import Value, Process, Queue, Array
