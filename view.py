@@ -111,6 +111,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                             scroll_thread = ScrollNextGameThread(matrix, font, color_white, team_color, game_data, break_scroll_loop)
                             scroll_thread.start()
                         elif(current_game_state == "Live" or current_game_state == "Final"):
+                            nhlboardrender.draw_live_helper(matrix, font, color_white, game_data)
                             pass
 
                 # Update current board state for next iteration of loop
