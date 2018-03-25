@@ -3,9 +3,8 @@ import json
 import nhl_board_render as nhlboardrender
 from matrix_thread import ScrollNextGameThread
 
-
 # The Board
-def board(rest_api_queue, shared_board_state, shared_board_brightness):
+def board(rest_api_queue, shared_board_state, shared_board_brightness, font, team_colors):
     ''' The main function of the Board process should be waiting
         for the REST API process to send it data
         
@@ -18,10 +17,6 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness):
     #board_process.start()
 
     # Things that wont change on board
-    # TODO move team colors and font to main
-    font = graphics.Font()
-    font.LoadFont('Assets/tom-thumb.bdf')
-    team_colors = json.load(open('Assets/nhlcolors.json'))
     color_white = graphics.Color(255, 255, 255)
 
     # Keep track of game state
