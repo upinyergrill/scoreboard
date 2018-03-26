@@ -103,7 +103,7 @@ def draw_live_helper(matrix, font, color, game_data):
     draw_home_team_score(matrix, font, color, game_data)
     draw_away_team_score(matrix, font, color, game_data)
     draw_period(matrix, font, color, game_data)
-    draw_carousel_takeaway(matrix, font, color, game_data)
+    draw_carousel_giveaway(matrix, font, color, game_data)
 
 def draw_carousel_sog(matrix, font, color, game_data):
     clear_area(matrix, 15, 30, 8, 6)
