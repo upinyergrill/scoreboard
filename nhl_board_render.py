@@ -84,12 +84,12 @@ def draw_home_team_abbr(matrix, font, color, game_data):
 def draw_away_team_score(matrix, font, color, game_data):
     clear_area(matrix, 20, 7, 8, 6)
     # Score positions
-    graphics.DrawText(matrix, font, 20, 7, color, str(game_data['awayScore']))
+    graphics.DrawText(matrix, font, 20, 7, color, "{0:0=2d}".format(game_data['awayScore']))
 
 def draw_home_team_score(matrix, font, color, game_data):
     clear_area(matrix, 36, 7, 8, 6)
     # Score positions
-    graphics.DrawText(matrix, font, 36, 7, color, str(game_data['homeScore']))
+    graphics.DrawText(matrix, font, 36, 7, color, "{0:0=2d}".format(game_data['homeScore']))
 
 def draw_period(matrix, font, color, game_data):
     clear_area(matrix, 26, 21, 12, 6)
@@ -109,25 +109,25 @@ def draw_carousel_sog(matrix, font, color, game_data):
     clear_area(matrix, 15, 30, 8, 6)
     clear_area(matrix, 26, 30, 12, 6)
     clear_area(matrix, 41, 30, 8, 6)
-    graphics.DrawText(matrix, font, 15, 30, color, str(game_data['awaySog']))
+    graphics.DrawText(matrix, font, 15, 30, color, "{0:0=2d}".format(game_data['awaySog']))
     graphics.DrawText(matrix, font, 26, 30, color, "SoG")
-    graphics.DrawText(matrix, font, 41, 30, color, str(game_data['homeSog']))
+    graphics.DrawText(matrix, font, 41, 30, color, "{0:0=2d}".format(game_data['homeSog']))
     
 def draw_carousel_hits(matrix, font, color, game_data):
     clear_area(matrix, 13, 30, 8, 6)
     clear_area(matrix, 24, 30, 16, 6)
     clear_area(matrix, 43, 30, 8, 6)
-    graphics.DrawText(matrix, font, 13, 30, color, str(game_data['awayHits']))
+    graphics.DrawText(matrix, font, 13, 30, color, "{0:0=2d}".format(game_data['awayHits']))
     graphics.DrawText(matrix, font, 24, 30, color, "HITS")
-    graphics.DrawText(matrix, font, 43, 30, color, str(game_data['homeHits']))
+    graphics.DrawText(matrix, font, 43, 30, color, "{0:0=2d}".format(game_data['homeHits']))
 
 def draw_carousel_blocked(matrix, font, color, game_data):
     clear_area(matrix, 7, 30, 8, 6)
     clear_area(matrix, 18, 30, 28, 6)
     clear_area(matrix, 49, 30, 8, 6)
-    graphics.DrawText(matrix, font, 7, 30, color, str(game_data['awayBlocked']))
+    graphics.DrawText(matrix, font, 7, 30, color, "{0:0=2d}".format(game_data['awayBlocked']))
     graphics.DrawText(matrix, font, 18, 30, color, "BLOCKED")
-    graphics.DrawText(matrix, font, 49, 30, color, str(game_data['homeBlocked']))
+    graphics.DrawText(matrix, font, 49, 30, color, "{0:0=2d}".format(game_data['homeBlocked']))
 
 def draw_carousel_faceoff(matrix, font, color, game_data):
     clear_area(matrix, 7, 30, 16, 6)
@@ -141,22 +141,22 @@ def draw_carousel_takeaway(matrix, font, color, game_data):
     clear_area(matrix, 4, 30, 8, 6)
     clear_area(matrix, 15, 30, 36, 6)
     clear_area(matrix, 54, 30, 8, 6)
-    graphics.DrawText(matrix, font, 4, 30, color, str(game_data['awayTakeaways']))
+    graphics.DrawText(matrix, font, 4, 30, color, "{0:0=2d}".format(game_data['awayTakeaways']))
     graphics.DrawText(matrix, font, 15, 30, color, "TAKEAWAYS")
-    graphics.DrawText(matrix, font, 54, 30, color, str(game_data['homeTakeaways']))
+    graphics.DrawText(matrix, font, 54, 30, color, "{0:0=2d}".format(game_data['homeTakeaways']))
 
 def draw_carousel_giveaway(matrix, font, color, game_data):
     clear_area(matrix, 4, 30, 8, 6)
     clear_area(matrix, 15, 30, 36, 6)
     clear_area(matrix, 54, 30, 8, 6)
-    graphics.DrawText(matrix, font, 4, 30, color, str(game_data['awayGiveaways']))
+    graphics.DrawText(matrix, font, 4, 30, color, "{0:0=2d}".format(game_data['awayGiveaways']))
     graphics.DrawText(matrix, font, 15, 30, color, "GIVEAWAYS")
-    graphics.DrawText(matrix, font, 54, 30, color, str(game_data['homeGiveaways']))
+    graphics.DrawText(matrix, font, 54, 30, color, "{0:0=2d}".format(game_data['homeGiveaways']))
 
 def draw_carousel_powerplay(matrix, font, color, game_data):
-    away_pp = str(nhlgameinfo.awayPP())
-    home_pp = str(nhlgameinfo.homePP())
-    clearInfo()
+    clear_area(matrix, 4, 30, 8, 6)
+    clear_area(matrix, 15, 30, 28, 6)
+    clear_area(matrix, 54, 30, 8, 6)
+    graphics.DrawText(matrix, font, 3, 30, color, str(game_data['awayPowerPlay']))
     graphics.DrawText(matrix, font, 18, 30, color, "PWRPLAY")
-    graphics.DrawText(matrix, font, 49, 30, color, home_pp)
-    graphics.DrawText(matrix, font, 3, 30, color, away_pp)
+    graphics.DrawText(matrix, font, 49, 30, color, str(game_data['homePowerPlay']))
