@@ -146,12 +146,12 @@ def draw_carousel_takeaway(matrix, font, color, game_data):
     graphics.DrawText(matrix, font, 54, 30, color, str(game_data['homeTakeaways']))
 
 def draw_carousel_giveaway(matrix, font, color, game_data):
-    away_giveaway = str(nhlgameinfo.awayGiveaways())
-    home_giveaway = str(nhlgameinfo.homeGiveaways())
-    clearInfo()
-    graphics.DrawText(matrix, font, 14, 30, color, "GIVEAWAYS")
-    graphics.DrawText(matrix, font, 53, 30, color, home_giveaway)
-    graphics.DrawText(matrix, font, 3, 30, color, away_giveaway)
+    clear_area(matrix, 4, 30, 8, 6)
+    clear_area(matrix, 15, 30, 36, 6)
+    clear_area(matrix, 54, 30, 8, 6)
+    graphics.DrawText(matrix, font, 4, 30, color, str(game_data['awayGiveaways']))
+    graphics.DrawText(matrix, font, 15, 30, color, "GIVEAWAYS")
+    graphics.DrawText(matrix, font, 54, 30, color, str(game_data['homeGiveaways']))
 
 def draw_carousel_powerplay(matrix, font, color, game_data):
     away_pp = str(nhlgameinfo.awayPP())
