@@ -114,7 +114,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                         elif(current_game_state == "Live" or current_game_state == "Final"):
                             nhlboardrender.draw_live_helper(matrix, font, color_white, game_data)
                             # Must use threads for the matrix
-                            carousel_thread = CarouselThread(matrix, font, color_white, game_data, 2, break_carousel_thread)
+                            carousel_thread = CarouselThread(matrix, font, color_white, game_data, 1.8, break_carousel_thread)
                             carousel_thread.start()
                             pass
 
