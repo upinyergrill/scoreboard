@@ -23,7 +23,8 @@ def clear_area(matrix, x, y, w, h):
     w = w - 1
     h = h - 1
     for i in range(y-h, y):
-        graphics.DrawLine(matrix, x, i, x+w, i, graphics.Color(207, 10, 44))
+        graphics.DrawLine(matrix, x, i, x+w, i, graphics.Color(0, 0, 0))
+        #graphics.DrawLine(matrix, x, i, x+w, i, graphics.Color(207, 10, 44))
 
 def draw_time_period_border(matrix, font, color):
     # Draw lines to contain time and period info
