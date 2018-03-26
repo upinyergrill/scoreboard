@@ -51,7 +51,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 # init for break
                 # This gives a new shared memory object
                 # per run of the loop.
-                break_scroll_loop = Value('i', False)
+                break_scroll_thread = Value('i', False)
+                break_carousel_thread = Value('i', False)
 
                 if game_data:
                     
@@ -108,12 +109,12 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                             nhlboardrender.draw_away_team_pre_game(matrix, font, color_white, game_data)
                             nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
                             # Must use threads for the matrix
-                            scroll_thread = ScrollNextGameThread(matrix, font, color_white, team_color, game_data, break_scroll_loop)
+                            scroll_thread = ScrollNextGameThread(matrix, font, color_white, team_color, game_data, break_scroll_thread)
                             scroll_thread.start()
                         elif(current_game_state == "Live" or current_game_state == "Final"):
                             nhlboardrender.draw_live_helper(matrix, font, color_white, game_data)
                             # Must use threads for the matrix
-                            carousel_thread = CarouselThread(matrix, font, color_white, game_data, 2, break_scroll_loop)
+                            carousel_thread = CarouselThread(matrix, font, color_white, game_data, 2, break_carousel_thread)
                             carousel_thread.start()
                             pass
 
@@ -123,9 +124,13 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 print('board waiting for game data')
                 game_data = rest_api_queue.get()
                 # tell thread to stop because we have new data now
-                with break_scroll_loop.get_lock():
-                    break_scroll_loop.value = True
-                    print('set break_scroll_loop to True')
+                with break_scroll_thread.get_lock():
+                    break_scroll_thread.value = True
+                    print('set break_scroll_thread to True')
+                # do same again for carousel
+                with break_carousel_thread.get_lock():
+                    break_carousel_thread.value = True
+                    print('set break_carousel_thread to True')
                 print('end of loop')
             except Exception as e:
                 print('e', e)
