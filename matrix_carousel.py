@@ -21,5 +21,5 @@ class MatrixCarousel(object):
                     else:
                         time.sleep(0.1)
                 # need this if statement to make it break from the for loop
-                if bool(self.break_loop.value) is False:
+                if bool(self.break_loop.value) is True:
                     break
