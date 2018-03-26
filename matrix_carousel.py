@@ -10,11 +10,11 @@ class MatrixCarousel(object):
         self.seconds_to_sleep = seconds_to_sleep
         self.break_loop = break_loop
 
-    def run(self):
-        timeout = time.time() + self.seconds_to_sleep
+    def run(self):        
         while bool(self.break_loop.value) is False:
             for function in self.functions:
                 function(self.args[0], self.args[1], self.args[2], self.args[3])
+                timeout = time.time() + self.seconds_to_sleep
                 while bool(self.break_loop.value) is False:
                     if time.time() > timeout:
                         break
