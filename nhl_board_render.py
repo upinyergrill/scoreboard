@@ -1,5 +1,7 @@
 from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 from scrollable_text import ScrollableText
+from matrix_carousel import MatrixCarousel
+import time
 
 def draw_away_team_pre_game(matrix, font, color, game_data):
     clear_area(matrix, 5, 7, 12, 6)
@@ -21,7 +23,7 @@ def clear_area(matrix, x, y, w, h):
     w = w - 1
     h = h - 1
     for i in range(y-h, y):
-        graphics.DrawLine(matrix, x, i, x+w, i, graphics.Color(0, 0, 0))
+        graphics.DrawLine(matrix, x, i, x+w, i, graphics.Color(207, 10, 44))
 
 def draw_time_period_border(matrix, font, color):
     # Draw lines to contain time and period info
@@ -103,7 +105,17 @@ def draw_live_helper(matrix, font, color, game_data):
     draw_home_team_score(matrix, font, color, game_data)
     draw_away_team_score(matrix, font, color, game_data)
     draw_period(matrix, font, color, game_data)
-    draw_carousel_powerplay(matrix, font, color, game_data)
+
+def draw_carousel(matrix, font, color, game_data, seconds_to_sleep, break_loop):
+    functions = [draw_carousel_sog,
+             draw_carousel_hits,
+             draw_carousel_blocked,
+             draw_carousel_takeaway,
+             draw_carousel_giveaway,
+             draw_carousel_powerplay]
+    args = [matrix, font, color, game_data]
+    carousel = MatrixCarousel(functions, args, seconds_to_sleep, break_loop)
+    carousel.run()
 
 def draw_carousel_sog(matrix, font, color, game_data):
     clear_area(matrix, 15, 30, 8, 6)

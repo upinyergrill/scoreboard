@@ -1,7 +1,7 @@
 from rgbmatrix import RGBMatrix, graphics, RGBMatrixOptions
 import json
 import nhl_board_render as nhlboardrender
-from matrix_thread import ScrollNextGameThread
+from matrix_thread import ScrollNextGameThread, CarouselThread
 from multiprocessing import Value
 
 # The Board
@@ -112,6 +112,9 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                             scroll_thread.start()
                         elif(current_game_state == "Live" or current_game_state == "Final"):
                             nhlboardrender.draw_live_helper(matrix, font, color_white, game_data)
+                            # Must use threads for the matrix
+                            carousel_thread = CarouselThread(matrix, font, color_white, game_data, 2, break_scroll_loop)
+                            carousel_thread.start()
                             pass
 
                 # Update current board state for next iteration of loop

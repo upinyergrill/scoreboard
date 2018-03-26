@@ -151,4 +151,4 @@ def set_team_and_fetch_nhl_data(shared_mem_team, rest_api_queue, shared_board_st
                 if time.time() > timeout:
                     break
                 else:
-                    time.sleep(0.25)
+                    time.sleep(0.1)
