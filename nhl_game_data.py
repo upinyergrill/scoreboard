@@ -73,11 +73,11 @@ def get_parsed_live_game_data(game_data):
         game_data['liveData']['linescore']['teams']['home']['numSkaters']
     )
 
-    game['awayPowerPlay'] = (
+    game['awayIsOnPowerPlay'] = (
         game_data['liveData']['linescore']['teams']['away']['powerPlay']
     )
 
-    game['homePowerPlay'] = (
+    game['homeIsOnPowerPlay'] = (
         game_data['liveData']['linescore']['teams']['home']['powerPlay']
     )
 
@@ -173,6 +173,18 @@ def get_parsed_live_game_data(game_data):
 
     game['goals'] = (
         get_all_goals(game_data)
+    )
+
+    game['awayPowerPlayStat'] = (
+        converted = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['powerPlayGoals'])
+        total = (parsed_gameinfo['liveData']['boxscore']['teams']['away']['teamStats']['teamSkaterStats']['powerPlayOpportunities'])
+        str(converted).split('.')[0] + "-" + str(total).split('.')[0]
+    )
+
+    game['homePowerPlayStat'] = (
+        converted = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['powerPlayGoals'])
+        total = (parsed_gameinfo['liveData']['boxscore']['teams']['home']['teamStats']['teamSkaterStats']['powerPlayOpportunities'])
+        str(converted).split('.')[0] + "-" + str(total).split('.')[0]
     )
 
     return game

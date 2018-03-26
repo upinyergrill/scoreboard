@@ -103,7 +103,7 @@ def draw_live_helper(matrix, font, color, game_data):
     draw_home_team_score(matrix, font, color, game_data)
     draw_away_team_score(matrix, font, color, game_data)
     draw_period(matrix, font, color, game_data)
-    draw_carousel_giveaway(matrix, font, color, game_data)
+    draw_carousel_powerplay(matrix, font, color, game_data)
 
 def draw_carousel_sog(matrix, font, color, game_data):
     clear_area(matrix, 15, 30, 8, 6)
@@ -155,8 +155,8 @@ def draw_carousel_giveaway(matrix, font, color, game_data):
 
 def draw_carousel_powerplay(matrix, font, color, game_data):
     clear_area(matrix, 4, 30, 8, 6)
-    clear_area(matrix, 15, 30, 28, 6)
-    clear_area(matrix, 54, 30, 8, 6)
-    graphics.DrawText(matrix, font, 3, 30, color, str(game_data['awayPowerPlay']))
-    graphics.DrawText(matrix, font, 18, 30, color, "PWRPLAY")
-    graphics.DrawText(matrix, font, 49, 30, color, str(game_data['homePowerPlay']))
+    clear_area(matrix, 19, 30, 28, 6)
+    clear_area(matrix, 50, 30, 8, 6)
+    graphics.DrawText(matrix, font, 5, 30, color, str(game_data['awayPowerPlayStat']))
+    graphics.DrawText(matrix, font, 19, 30, color, "PWRPLAY")
+    graphics.DrawText(matrix, font, 50, 30, color, str(game_data['homePowerPlayStat']))
