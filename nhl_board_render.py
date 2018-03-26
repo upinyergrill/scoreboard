@@ -154,9 +154,9 @@ def draw_carousel_giveaway(matrix, font, color, game_data):
     graphics.DrawText(matrix, font, 54, 30, color, "{0:0=2d}".format(game_data['homeGiveaways']))
 
 def draw_carousel_powerplay(matrix, font, color, game_data):
-    clear_area(matrix, 4, 30, 8, 6)
+    clear_area(matrix, 4, 30, 12, 6)
     clear_area(matrix, 19, 30, 28, 6)
-    clear_area(matrix, 50, 30, 8, 6)
+    clear_area(matrix, 50, 30, 12, 6)
     graphics.DrawText(matrix, font, 4, 30, color, str(game_data['awayPowerPlayStat']))
     graphics.DrawText(matrix, font, 19, 30, color, "PWRPLAY")
     graphics.DrawText(matrix, font, 50, 30, color, str(game_data['homePowerPlayStat']))
