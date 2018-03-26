@@ -20,3 +20,6 @@ class MatrixCarousel(object):
                         break
                     else:
                         time.sleep(0.1)
+                # need this if statement to make it break from the for loop
+                if bool(self.break_loop.value) is False:
+                    break
