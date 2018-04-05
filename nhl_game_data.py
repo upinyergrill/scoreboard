@@ -248,6 +248,10 @@ def format_game_datetime(date_time):
     '''
     utc_time = dateutil.parser.parse(date_time)
     local_time = (utc_time.astimezone(pytz.timezone("US/Eastern")))
+    local_time_format = local_time.strftime('%a, %b %d, %I:%M%p')
+    local_time_upper = local_time_format.upper()
+    return local_time_upper
+
     return local_time.strftime('%a, %b %d, %I:%M%p')
 
 def format_power_plays(converted, total):
