@@ -61,11 +61,10 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 # If brightness changes, re-render the board
                 if (current_brightness != shared_board_brightness.value):
                     # matrix __dealloc__
-                    ''' The matrix being deallocated from memory 
-                        does not mean that the board hardware will turn off
-                        the led.  You have to clear the matrix aka turn off 
-                        the leds on the board, before your dellac the matrix
-                    '''
+                    # The matrix being deallocated from memory 
+                    # does not mean that the board hardware will turn off
+                    # the led.  You have to clear the matrix aka turn off 
+                    # the leds on the board, before your dellac the matrix
                     matrix.Clear()
                     matrix = None
                     #del matrix
