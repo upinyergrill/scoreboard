@@ -42,11 +42,11 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
         options.drop_privileges = 0
 
         # Create matrix with optiosn
-        matrix = RGBMatrix(options = options)
+       # matrix = RGBMatrix(options = options)
 
         print('the board started')
 
-        while True:
+        ''' while True:
             try:
                 # init for break
                 # This gives a new shared memory object
@@ -146,4 +146,4 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 print('e', e)
                 #time.sleep(10)
                 pass
-
+ '''
