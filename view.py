@@ -94,7 +94,9 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                         # preview -> live   | Clear
                         # live -> final     | Don't clear
                         # final -> preview  | Clear
-                        if (current_game_state is not None):
+                        # Actaully, just always clear
+                        matrix.Clear()
+                        ''' if (current_game_state is not None):
                             if (current_game_state == "Preview" and game_data['gameState'] == "Live"):
                                 matrix.Clear()
                             # This one is incase user switches board from a team that is live to a team thats in preview
@@ -102,8 +104,12 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                                 matrix.Clear() 
                             elif (current_game_state == "Live" and game_data['gameState'] == "Final"):
                                 pass
-                            if (current_game_state == "Final" and game_data['gameState'] == "Preview"):
+                            elif (current_game_state == "Final" and game_data['gameState'] == "Preview"):
                                 matrix.Clear()
+                            elif (current_game_state == "Final" and game_data['gameState'] == "Live"):
+                                matrix.Clear()
+                            elif (current_game_state == "Preview" and game_data['gameState'] == "Final"):
+                                matrix.Clear() '''
 
                         current_game_state = game_data['gameState']
 
