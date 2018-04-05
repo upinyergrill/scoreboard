@@ -61,6 +61,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 # If brightness changes, re-render the board
                 if (current_brightness != shared_board_brightness.value):
                     # matrix __dealloc__
+                    matrix.Clear()
                     matrix = None
                     break
                 
