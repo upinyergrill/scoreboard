@@ -46,7 +46,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
 
         print('the board started')
 
-        ''' while True:
+        while True:
             try:
                 # init for break
                 # This gives a new shared memory object
@@ -59,7 +59,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 # the data before we start waiting for new data
                 #current_game_data = game_data
                 # If brightness changes, re-render the board
-                if (current_brightness != shared_board_brightness.value):
+                ''' if (current_brightness != shared_board_brightness.value):
                     # matrix __dealloc__
                     # The matrix being deallocated from memory 
                     # does not mean that the board hardware will turn off
@@ -125,7 +125,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                             # Must use threads for the matrix
                             carousel_thread = CarouselThread(matrix, font, color_white, game_data, 1.8, break_carousel_thread)
                             #carousel_thread.start()
-                            pass
+                            pass '''
 
                 # Update current board state for next iteration of loop
                 # dont need this, setting in set_team_and_fetch_nhl_data
@@ -145,4 +145,4 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 print('e', e)
                 #time.sleep(10)
                 pass
- '''
+
