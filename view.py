@@ -120,12 +120,12 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                             nhlboardrender.draw_home_team_pre_game(matrix, font, color_white, game_data)
                             # Must use threads for the matrix
                             scroll_thread = ScrollNextGameThread(matrix, font, color_white, team_color, game_data, break_scroll_thread)
-                            scroll_thread.start()
+                            #scroll_thread.start()
                         elif(current_game_state == "Live" or current_game_state == "Final"):
                             nhlboardrender.draw_live_helper(matrix, font, color_white, game_data)
                             # Must use threads for the matrix
                             carousel_thread = CarouselThread(matrix, font, color_white, game_data, 1.8, break_carousel_thread)
-                            carousel_thread.start()
+                            #carousel_thread.start()
                             pass
 
                 # Update current board state for next iteration of loop
