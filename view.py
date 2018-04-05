@@ -54,21 +54,20 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
                 break_scroll_thread = Value('i', False)
                 break_carousel_thread = Value('i', False)
 
-                if game_data:
-                    
-                    # We will hold on to this game_data incase we break from this looop
-                    # to reallocate the matrix with a new brightness, and we can rerender
-                    # the data before we start waiting for new data
-                    #current_game_data = game_data
-                    # If brightness changes, re-render the board
-                    if (current_brightness != shared_board_brightness.value):
-                        # matrix __dealloc__
-                        matrix = None
-                        break
-                    
-                    
-                    current_brightness = shared_board_brightness.value
+                # We will hold on to this game_data incase we break from this looop
+                # to reallocate the matrix with a new brightness, and we can rerender
+                # the data before we start waiting for new data
+                #current_game_data = game_data
+                # If brightness changes, re-render the board
+                if (current_brightness != shared_board_brightness.value):
+                    # matrix __dealloc__
+                    matrix = None
+                    break
+                
+                
+                current_brightness = shared_board_brightness.value
 
+                if game_data:
                     print('board got game data')
                     #print(game_data)
                     print('current_board_state', current_board_state)
