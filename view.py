@@ -42,7 +42,7 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
         options.drop_privileges = 0
 
         # Create matrix with optiosn
-       matrix = RGBMatrix(options = options)
+        matrix = RGBMatrix(options = options)
 
         print('the board started')
 
