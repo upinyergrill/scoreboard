@@ -3,6 +3,7 @@ import json
 import nhl_board_render as nhlboardrender
 from matrix_thread import ScrollNextGameThread, CarouselThread
 from multiprocessing import Value
+import gc
 
 # The Board
 def board(rest_api_queue, shared_board_state, shared_board_brightness, font, team_colors):
@@ -28,6 +29,8 @@ def board(rest_api_queue, shared_board_state, shared_board_brightness, font, tea
     game_data = {}
 
     while True:
+        # Clear unrefernced memory 
+        gc.collect()
         # init board state
         current_board_state = shared_board_state.value
         # Init brightness from shared mem
